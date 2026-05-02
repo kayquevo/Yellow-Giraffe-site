@@ -88,13 +88,13 @@ body {
 }
 
 footer {
-    background-color: #1a1a1a; /* Preto suave */
-    border-top: 5px solid #fdb131; /* Linha amarela da Yellow Giraffe */
-    color: #ffffff; /* Texto branco para dar leitura */
+    background-color: #1a1a1a; 
+    border-top: 5px solid #fdb131; 
+    color: #ffffff; 
     padding: 50px 0;
 }
 
-/* Ajuste o link do 'Área de Funcionário' para não sumir no preto */
+
 footer a {
     color: #ffcc00; 
     text-decoration: none;
@@ -124,7 +124,7 @@ footer a {
 }
 
 .footer-bottom {
-    position: relative; /* Base para a logo se posicionar */
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -136,5 +136,12 @@ footer a {
     font-size: 12px;
     margin: 0;
     text-align: center;
+}
+
+.banner-manchas-deposito {
+    background-image: url(manchas_deposito.png);
+    background-size: cover;
+    background-position: center;
+    padding: 60px 15px;
 }
 
