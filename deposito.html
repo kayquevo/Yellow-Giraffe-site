@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -128,6 +128,71 @@
   </div>
 </div>
 
+
+<!-- --------------------------------------------  Tabela de Sorvetes  -------------------------------------------- -->
+ <div class="container my-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8">
+      
+      <h2 class="yellow-titulo text-center mb-4">SORVETES</h2>
+      
+      <table class="table text-white align-middle">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center"></th>
+            <th scope="col">Tipo</th>
+            <th scope="col" class="text-center">Quantidade</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+          
+          <tr>
+            <th scope="row" class="text-center">7</th>
+            <td class="text">Chocolate</td>
+            <td>
+              <input type="number" id="qtde-chocolate" class="form-control form-control-sm bg-dark text-white mx-auto" style="max-width: 100px;" >
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row" class="text-center">8</th>
+            <td class="text">Creme</td>
+            <td>
+              <input type="number" id="qtde-creme" class="form-control form-control-sm bg-dark text-white mx-auto" style="max-width: 100px;" >
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row" class="text-center">9</th>
+            <td class="text">Morango</td>
+            <td>
+              <input type="number" id="qtde-morango" class="form-control form-control-sm bg-dark text-white mx-auto" style="max-width: 100px;" >
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row" class="text-center">10</th>
+            <td class="text">Coco</td>
+            <td>
+              <input type="number" id="qtde-coco" class="form-control form-control-sm bg-dark text-white mx-auto" style="max-width: 100px;" >
+            </td>
+          </tr>
+
+          <tr>
+            <th scope="row" class="text-center">11</th>
+            <td class="text">Flocos</td>
+            <td>
+              <input type="number" id="qtde-flocos" class="form-control form-control-sm bg-dark text-white mx-auto" style="max-width: 100px;" >
+            </td>
+          </tr>
+          
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
 <!-- ----------------------------------------------------------------------------------------------------------- -->
 
 <div class="text-center mt-3">
@@ -141,34 +206,53 @@
 
 <script>
     function salvarEstoque(){
-        // --------------------------------------------  CONGELADOS JC  -------------------------------------------- //
+        // --------------------------------------------  CONGELADOS JC1  -------------------------------------------- //
         const lagarto = document.getElementById('qtde-lagarto').value;
         const filet = document.getElementById('qtde-filet').value;
         const frango = document.getElementById('qtde-frango').value;
         const coxa = document.getElementById('qtde-coxa').value;
         const salmao = document.getElementById('qtde-salmao').value;
         const picanha = document.getElementById('qtde-picanha').value;
-        // --------------------------------------------  CONGELADOS JC  -------------------------------------------- //
+        // --------------------------------------------  SORVETES JC1  -------------------------------------------- //
+        const chocolate = document.getElementById('qtde-chocolate').value;
+        const creme = document.getElementById('qtde-creme').value;
+        const morango = document.getElementById('qtde-morango').value;
+        const coco = document.getElementById('qtde-coco').value;
+        const flocos = document.getElementById('qtde-flocos').value;
+
+        // --------------------------------------------  CONGELADOS JC2  -------------------------------------------- //
         localStorage.setItem('estoque-lagarto', lagarto);
         localStorage.setItem('estoque-filet', filet);
         localStorage.setItem('estoque-frango', frango);
         localStorage.setItem('estoque-coxa', coxa);
         localStorage.setItem('estoque-salmao', salmao);
         localStorage.setItem('estoque-picanha', picanha);
+        // --------------------------------------------  SORVETES JC2  -------------------------------------------- //
+        localStorage.setItem('estoque-chocolate', chocolate);
+        localStorage.setItem('estoque-creme', creme);
+        localStorage.setItem('estoque-morango', morango);
+        localStorage.setItem('estoque-coco', coco);
+        localStorage.setItem('estoque-flocos', flocos);
 
         alert("Estoque do Yellow Giraffe atualizado com sucesso");
     }
 
 window.onload = function(){
-    // --------------------------------------------  CONGELADOS JC  -------------------------------------------- //
+    // --------------------------------------------  CONGELADOS JC3  -------------------------------------------- //
     const lagartoSalvo = localStorage.getItem('estoque-lagarto');
     const filetSalvo = localStorage.getItem('estoque-filet');
     const frangoSalvo = localStorage.getItem('estoque-frango');
     const coxaSalvo = localStorage.getItem('estoque-coxa');
     const salmaoSalvo = localStorage.getItem('estoque-salmao');
     const picanhaSalvo = localStorage.getItem('estoque-picanha');
+    // --------------------------------------------  SORVETES JC3  -------------------------------------------- //
+    const chocolateSalvo = localStorage.getItem('estoque-chocolate');
+    const cremeSalvo = localStorage.getItem('estoque-creme');
+    const morangoSalvo = localStorage.getItem('estoque-morango');
+    const cocoSalvo = localStorage.getItem('estoque-coco');
+    const flocosSalvo = localStorage.getItem('estoque-flocos');
 
-    // --------------------------------------------  CONGELADOS JC  -------------------------------------------- //
+    // --------------------------------------------  CONGELADOS JC4  -------------------------------------------- //
     if (lagartoSalvo !== null){
         document.getElementById('qtde-lagarto').value = lagartoSalvo;
     }
@@ -186,6 +270,22 @@ window.onload = function(){
     }
     if (picanhaSalvo !== null){
         document.getElementById('qtde-picanha').value = picanhaSalvo;
+    }
+    // --------------------------------------------  SORVETES JC4  -------------------------------------------- //
+    if (chocolateSalvo !== null){
+        document.getElementById('qtde-chocolate').value = chocolateSalvo;
+    }
+    if (cremeSalvo !== null){
+        document.getElementById('qtde-creme').value = cremeSalvo;
+    }
+    if (morangoSalvo !== null){
+        document.getElementById('qtde-morango').value = morangoSalvo;
+    }
+    if (cocoSalvo !== null){
+        document.getElementById('qtde-coco').value = cocoSalvo;
+    }
+    if (cocoSalvo !== null){
+        document.getElementById('qtde-flocos').value = flocosSalvo;
     }
 }
 </script>

@@ -145,3 +145,26 @@ footer a {
     padding: 60px 15px;
 }
 
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+table thead th:nth-child(1),
+table tbody th:nth-child(1) {
+    width: 10%;
+}
+
+table thead th:nth-child(2),
+table tbody td:nth-child(2) {
+    width: 60%;
+}
+
+table thead th:nth-child(3),
+table tbody td:nth-child(3) {
+    width: 30%;
+}
+
+
+
+
