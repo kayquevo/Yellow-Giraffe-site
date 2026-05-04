@@ -37,7 +37,7 @@ body {
 }
 
 .banner-manchas {
-    background-image: url(manchas.png);
+    background-image: url(./imgs/manchas.png);
     background-size: cover;
     background-position: center;
     padding: 60px 15px;
@@ -139,7 +139,7 @@ footer a {
 }
 
 .banner-manchas-deposito {
-    background-image: url(manchas_deposito.png);
+    background-image: url(./imgs/manchas_deposito.png);
     background-size: cover;
     background-position: center;
     padding: 60px 15px;
