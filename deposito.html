@@ -303,161 +303,32 @@
 
 <!-- --------------------------------------------  JavaScript  -------------------------------------------- -->
 
-
 <script>
-    function salvarEstoque(){
-        // --------------------------------------------  CONGELADOS JC1  -------------------------------------------- //
-        const lagarto = document.getElementById('qtde-lagarto').value;
-        const filet = document.getElementById('qtde-filet').value;
-        const frango = document.getElementById('qtde-frango').value;
-        const coxa = document.getElementById('qtde-coxa').value;
-        const salmao = document.getElementById('qtde-salmao').value;
-        const picanha = document.getElementById('qtde-picanha').value;
-        const fritas = document.getElementById('qtde-fritas').value;
-        const onionrings = document.getElementById('qtde-onionrings').value;
-        // --------------------------------------------  FRIOS JC1  -------------------------------------------- //
-        const prata = document.getElementById('qtde-prata').value;
-        const mussarela = document.getElementById('qtde-mussarela').value;
-        const qbranco = document.getElementById('qtde-qbranco').value;
-        const brie = document.getElementById('qtde-brie').value;
-        const catupiry = document.getElementById('qtde-catupiry').value;
-        const cheddar = document.getElementById('qtde-cheddar').value;
-        const cheese = document.getElementById('qtde-cheese').value;
 
+  const itensEstoque = [
+    'lagarto', 'filet', 'frango', 'coxa', 'salmao', 'picanha', 'fritas', 'onionrings',
+    'prata', 'mussarela', 'qbranco', 'brie', 'catupiry', 'cheddar', 'cheese',
+    'chocolate', 'creme', 'morango', 'coco', 'flocos'
+];
 
-        // --------------------------------------------  SORVETES JC1  -------------------------------------------- //
-        const chocolate = document.getElementById('qtde-chocolate').value;
-        const creme = document.getElementById('qtde-creme').value;
-        const morango = document.getElementById('qtde-morango').value;
-        const coco = document.getElementById('qtde-coco').value;
-        const flocos = document.getElementById('qtde-flocos').value;
-        // --------------------------------------------  PRATELEIRAS JC1  -------------------------------------------- //
-        
+    function salvarEstoque() {
+    itensEstoque.forEach(item => {
+        const valor = document.getElementById(`qtde-${item}`).value;
+        localStorage.setItem(`estoque-${item}`, valor);
+    });
 
-        // --------------------------------------------  CONGELADOS JC2  -------------------------------------------- //
-        localStorage.setItem('estoque-lagarto', lagarto);
-        localStorage.setItem('estoque-filet', filet);
-        localStorage.setItem('estoque-frango', frango);
-        localStorage.setItem('estoque-coxa', coxa);
-        localStorage.setItem('estoque-salmao', salmao);
-        localStorage.setItem('estoque-picanha', picanha);
-        localStorage.setItem('estoque-fritas', fritas);
-        localStorage.setItem('estoque-onionrings', onionrings);
-        // --------------------------------------------  FRIOS JC2  -------------------------------------------- //
-        localStorage.setItem('estoque-prata', prata);
-        localStorage.setItem('estoque-mussarela', mussarela);
-        localStorage.setItem('estoque-qbranco', qbranco);
-        localStorage.setItem('estoque-brie', brie);
-        localStorage.setItem('estoque-catupiry', catupiry);
-        localStorage.setItem('estoque-cheddar', cheddar);
-        localStorage.setItem('estoque-cheese', cheese);
-
-
-        // --------------------------------------------  SORVETES JC2  -------------------------------------------- //
-        localStorage.setItem('estoque-chocolate', chocolate);
-        localStorage.setItem('estoque-creme', creme);
-        localStorage.setItem('estoque-morango', morango);
-        localStorage.setItem('estoque-coco', coco);
-        localStorage.setItem('estoque-flocos', flocos);
-        // --------------------------------------------  PRATELEIRAS JC2  -------------------------------------------- //
-        
-
-        alert("Estoque do Yellow Giraffe atualizado com sucesso");
-    }
-
-window.onload = function(){
-    // --------------------------------------------  CONGELADOS JC3  -------------------------------------------- //
-    const lagartoSalvo = localStorage.getItem('estoque-lagarto');
-    const filetSalvo = localStorage.getItem('estoque-filet');
-    const frangoSalvo = localStorage.getItem('estoque-frango');
-    const coxaSalvo = localStorage.getItem('estoque-coxa');
-    const salmaoSalvo = localStorage.getItem('estoque-salmao');
-    const picanhaSalvo = localStorage.getItem('estoque-picanha');
-    const fritasSalvo = localStorage.getItem('estoque-fritas');
-    const onionringsSalvo = localStorage.getItem('estoque-onionrings');
-    // --------------------------------------------  FRIOS JC3  -------------------------------------------- //
-    const prataSalvo = localStorage.getItem('estoque-prata');
-    const mussarelaSalvo = localStorage.getItem('estoque-mussarela');
-    const qbrancoSalvo = localStorage.getItem('estoque-qbranco');
-    const brieSalvo = localStorage.getItem('estoque-brie');
-    const catupirySalvo = localStorage.getItem('estoque-catupiry');
-    const cheddarSalvo = localStorage.getItem('estoque-cheddar');
-    const cheeseSalvo = localStorage.getItem('estoque-cheese');
-
-
-    // --------------------------------------------  SORVETES JC3  -------------------------------------------- //
-    const chocolateSalvo = localStorage.getItem('estoque-chocolate');
-    const cremeSalvo = localStorage.getItem('estoque-creme');
-    const morangoSalvo = localStorage.getItem('estoque-morango');
-    const cocoSalvo = localStorage.getItem('estoque-coco');
-    const flocosSalvo = localStorage.getItem('estoque-flocos');
-    // --------------------------------------------  PRATELEIRAS JC3  -------------------------------------------- //
-    
-
-    // --------------------------------------------  CONGELADOS JC4  -------------------------------------------- //
-    if (lagartoSalvo !== null){
-        document.getElementById('qtde-lagarto').value = lagartoSalvo;
-    }
-    if (filetSalvo !== null){
-        document.getElementById('qtde-filet').value = filetSalvo;
-    }
-    if (frangoSalvo !== null){
-        document.getElementById('qtde-frango').value = frangoSalvo;
-    }
-    if (coxaSalvo !== null){
-        document.getElementById('qtde-coxa').value = coxaSalvo;
-    }
-    if (salmaoSalvo !== null){
-        document.getElementById('qtde-salmao').value = salmaoSalvo;
-    }
-    if (picanhaSalvo !== null){
-        document.getElementById('qtde-picanha').value = picanhaSalvo;
-    }
-    if (onionringsSalvo !== null){
-        document.getElementById('qtde-onionrings').value = onionringsSalvo;
-    }
-    // --------------------------------------------  FRIOS JC4  -------------------------------------------- //
-    if (prataSalvo !== null){
-        document.getElementById('qtde-prata').value = prataSalvo;
-    }
-    if (mussarelaSalvo !== null){
-        document.getElementById('qtde-mussarela').value = mussarelaSalvo;
-    }
-    if (qbrancoSalvo !== null){
-        document.getElementById('qtde-qbranco').value = qbrancoSalvo;
-    }
-    if (brieSalvo !== null){
-        document.getElementById('qtde-brie').value = brieSalvo;
-    }
-    if (catupirySalvo !== null){
-        document.getElementById('qtde-catupiry').value = catupirySalvo;
-    }
-    if (cheddarSalvo !== null){
-        document.getElementById('qtde-cheddar').value = cheddarSalvo;
-    }
-    if (cheddarSalvo !== null){
-        document.getElementById('qtde-cheese').value = cheeseSalvo;
-    }
-
-
-    // --------------------------------------------  SORVETES JC4  -------------------------------------------- //
-    if (chocolateSalvo !== null){
-        document.getElementById('qtde-chocolate').value = chocolateSalvo;
-    }
-    if (cremeSalvo !== null){
-        document.getElementById('qtde-creme').value = cremeSalvo;
-    }
-    if (morangoSalvo !== null){
-        document.getElementById('qtde-morango').value = morangoSalvo;
-    }
-    if (cocoSalvo !== null){
-        document.getElementById('qtde-coco').value = cocoSalvo;
-    }
-    if (flocosSalvo !== null){
-        document.getElementById('qtde-flocos').value = flocosSalvo;
-    }
-    // --------------------------------------------  PRATELEIRAS JC4  -------------------------------------------- //
-    
+    alert("Estoque do Yellow Giraffe atualizado com sucesso");
 }
+
+window.onload = function() {
+    itensEstoque.forEach(item => {
+        const valorSalvo = localStorage.getItem(`estoque-${item}`);
+        const elemento = document.getElementById(`qtde-${item}`);
+
+        if (valorSalvo !== null && elemento) {
+            elemento.value = valorSalvo;
+        }
+    });
+};
 </script>
 </html>
