@@ -1,0 +1,331 @@
+/* =====================================================
+   FONTE OFICIAL GOOGLE FONTS
+===================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+/* =====================================================
+   ESTILOS GERAIS DO PROJETO (INDEX E PÁGINAS PRINCIPAIS)
+===================================================== */
+body {
+    background-color: black;
+    color: white;
+    font-family: 'Arial', sans-serif; 
+}
+
+.navbar-nav .nav-link {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 16px;
+    letter-spacing: 1px;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+    color: white;
+    border-radius: 5px;
+    padding: 5px 20px;
+    margin: 0 5px;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    background-color: #fdb131;
+    color: #000 !important;
+}
+
+.yellow-titulo {
+    color: #fdb131;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+}
+
+.yellow-text {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.5;
+}
+
+/* BANNER DE MANCHAS - IMAGEM E FALLBACK GARANTIDO */
+.banner-manchas {
+    background-image: url('imgs/manchas.png'), url('./imgs/manchas.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 60px 15px;
+    min-height: 200px;
+    width: 100%;
+}
+
+.caixa-info {
+    max-width: 700px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.5);
+    border-radius: 30px;
+}
+
+.titulo-delivery {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 1.5px;
+}
+
+.selo-itaimbibi {
+    background-color: #fdb131;
+    font-size: 1rem;
+}
+
+.texto-horario {
+    font-size: 1.1rem;
+}
+
+.texto-endereco {
+    font-style: italic;
+    font-weight: 300;
+}
+
+.texto-telefone {
+    font-size: 1.3rem;
+}
+
+.card-dark-custom {
+    background-color: #121212;
+    border: 1px solid #fdb131;
+    border-radius: 8px;
+    color: white;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-dark-custom:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 15px rgba(253, 177, 49, 0.3);
+}
+
+.card-dark-custom .card-title {
+    color: #fdb131;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+}
+
+.card-dark-custom .card-text {
+    color: #b0b0b0;
+}
+
+footer {
+    background-color: #1a1a1a; 
+    border-top: 5px solid #fdb131; 
+    color: #ffffff; 
+    padding: 50px 0;
+}
+
+footer a {
+    color: #ffcc00; 
+    text-decoration: none;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #b0b0b0;
+    font-size: 14px;
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+    color: #fdb131;
+}
+
+.divider {
+    color: #ccc;
+    font-weight: lighter;
+}
+
+.footer-bottom {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60px;
+}
+
+.copyright {
+    color: #666;
+    font-size: 12px;
+    margin: 0;
+    text-align: center;
+}
+
+.banner-manchas-deposito {
+    background-image: url('imgs/manchas_deposito.png'), url('./imgs/manchas_deposito.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: 60px 15px;
+}
+
+/* =====================================================
+   ESTILOS EXCLUSIVOS DO PORTAL DO FUNCIONÁRIO (VINI.HTML)
+   (Prefixados para não interferir em nada do index.html)
+===================================================== */
+.portal-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    background: #121212;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #2d2d2d;
+}
+
+.portal-tab-btn {
+    background: transparent;
+    border: 1px solid #fdb131;
+    color: #fdb131;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: 1px;
+    padding: 8px 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.portal-tab-btn:hover,
+.portal-tab-btn.active {
+    background-color: #fdb131;
+    color: #000;
+    box-shadow: 0 0 10px rgba(253, 177, 49, 0.4);
+}
+
+.portal-tela {
+    display: none;
+    animation: fadeIn 0.25s ease-in-out;
+}
+
+.portal-tela.ativa {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-custom {
+    background-color: #121212;
+    border: 1px solid #2d2d2d;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.form-custom .form-control,
+.form-custom .form-select {
+    background-color: #1a1a1a;
+    border: 1px solid #444;
+    color: #fff;
+    padding: 10px 14px;
+}
+
+.form-custom .form-control:focus,
+.form-custom .form-select:focus {
+    background-color: #222;
+    border-color: #fdb131;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(253, 177, 49, 0.4);
+}
+
+.form-custom .form-control::placeholder {
+    color: #777;
+}
+
+.btn-yellow {
+    background-color: #fdb131;
+    color: #000;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+    font-size: 1.1rem;
+    border: none;
+    transition: 0.2s;
+}
+
+.btn-yellow:hover {
+    background-color: #e59d22;
+    color: #000;
+}
+
+.table-dark-custom {
+    background-color: #121212;
+    color: #fff;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.table-dark-custom thead th {
+    background-color: #1f1f1f;
+    color: #fdb131;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #fdb131;
+    text-align: center;
+    padding: 12px;
+}
+
+.table-dark-custom tbody td {
+    vertical-align: middle;
+    text-align: center;
+    border-bottom: 1px solid #262626;
+    padding: 10px;
+}
+
+.badge-baixo {
+    background-color: #dc3545;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.badge-medio {
+    background-color: #ffc107;
+    color: #000;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.badge-alto {
+    background-color: #198754;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.relogio-box {
+    background-color: #121212;
+    border-left: 4px solid #fdb131;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1.2px;
+    font-size: 1.3rem;
+    color: #fdb131;
+    display: inline-block;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}

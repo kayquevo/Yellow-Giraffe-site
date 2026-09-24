@@ -1,0 +1,617 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Yellow Giraffe - Área do Funcionário</title>
+
+    <!-- BOOTSTRAP 5.2.3 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- FONTES E ESTILOS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="icon" type="image/x-icon" href="yellowgiraffelogo.jpg">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg bg-transparent navbar-dark pt-3 px-4"> 
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+                <img src="./imgs/yellowgiraffelogo.jpg" alt="Logo" width="45" height="45" class="rounded-circle">
+                <span class="yellow-titulo fs-3">YELLOW GIRAFFE</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center gap-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="ondeEstamos.html">ONDE ESTAMOS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="principaisOp.html">ESPECIALIDADES DA CASA</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER DO PORTAL -->
+    <div class="container text-center my-4">
+        <h1 class="yellow-titulo display-4">PORTAL DE GESTÃO INTERNA</h1>
+        <p class="yellow-text">Controle operacional de ponto, estoque de insumos e equipe.</p>
+    </div>
+
+    <!-- ABAS DE NAVEGAÇÃO INTERNA -->
+    <div class="container mb-4">
+        <div class="portal-tabs">
+            <button class="portal-tab-btn active" onclick="mostrarTela('dashboard', this)">DASHBOARD</button>
+            <button class="portal-tab-btn" onclick="mostrarTela('estoque', this)">ESTOQUE</button>
+            <button class="portal-tab-btn" onclick="mostrarTela('funcionarios', this)">FUNCIONÁRIOS</button>
+            <button class="portal-tab-btn" onclick="mostrarTela('controle', this)">CONTROLE DE PONTO</button>
+            <button class="portal-tab-btn" onclick="mostrarTela('rh', this)">RH</button>
+            <button class="portal-tab-btn" onclick="mostrarTela('mesas', this)">MESAS</button>
+            <button class="portal-tab-btn" onclick="mostrarTela('pedidos', this)">PEDIDOS</button>
+        </div>
+    </div>
+
+    <!-- CONTEÚDO DAS TELAS -->
+    <div class="container mb-5 pb-5">
+
+        <!-- TELA: DASHBOARD -->
+        <div id="dashboard" class="portal-tela ativa">
+            <h3 class="yellow-titulo mb-3">VISÃO GERAL DO RESTAURANTE</h3>
+            <div class="row g-3">
+                <div class="col-md-4 col-sm-6">
+                    <div class="card card-dark-custom p-3 text-center h-100 cursor-pointer" onclick="selecionarAba('controle')">
+                        <h4 class="card-title">⏰ PONTO</h4>
+                        <p class="card-text mb-0">Registro rápido de entrada e saída da equipe</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card card-dark-custom p-3 text-center h-100 cursor-pointer" onclick="selecionarAba('estoque')">
+                        <h4 class="card-title">📦 ESTOQUE</h4>
+                        <p class="card-text mb-0">Balanço de ingredientes e insumos da cozinha</p>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-6">
+                    <div class="card card-dark-custom p-3 text-center h-100 cursor-pointer" onclick="selecionarAba('funcionarios')">
+                        <h4 class="card-title">👨‍🍳 EQUIPE</h4>
+                        <p class="card-text mb-0">Gestão e cadastro de colaboradores</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="card card-dark-custom p-3 text-center h-100 cursor-pointer" onclick="selecionarAba('mesas')">
+                        <h4 class="card-title">🪑 SALÃO & MESAS</h4>
+                        <p class="card-text mb-0">Status de ocupação em tempo real</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="card card-dark-custom p-3 text-center h-100 cursor-pointer" onclick="selecionarAba('pedidos')">
+                        <h4 class="card-title">🧾 PEDIDOS & DELIVERY</h4>
+                        <p class="card-text mb-0">Acompanhamento dos pedidos para a cozinha</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TELA: ESTOQUE -->
+        <div id="estoque" class="portal-tela">
+            <h3 class="yellow-titulo mb-3">CONTROLE DE ESTOQUE</h3>
+
+            <!-- Indicadores -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-4">
+                    <div class="card card-dark-custom p-3 text-center">
+                        <span class="text-secondary small fw-bold">TOTAL DE PRODUTOS</span>
+                        <h2 class="text-white mt-2 mb-0" id="totalProdutos">0</h2>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card card-dark-custom p-3 text-center">
+                        <span class="text-secondary small fw-bold">PRODUTOS EM BAIXA</span>
+                        <h2 class="text-danger mt-2 mb-0" id="baixoEstoque">0</h2>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card card-dark-custom p-3 text-center">
+                        <span class="text-secondary small fw-bold">VALOR ESTIMADO</span>
+                        <h2 class="text-warning mt-2 mb-0" id="valorTotal">R$ 0,00</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulário -->
+            <div class="form-custom mb-4">
+                <h5 class="yellow-titulo mb-3">ADICIONAR NOVO ITEM AO ESTOQUE</h5>
+                <div class="row g-2">
+                    <div class="col-md-4">
+                        <input type="text" id="produto" class="form-control" placeholder="Nome do Produto (Ex: Pão Sírio)">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" id="quantidade" class="form-control" placeholder="Qtd">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="number" id="preco" class="form-control" step="0.01" placeholder="Preço Unit. (R$)">
+                    </div>
+                    <div class="col-md-3">
+                        <select id="categoria" class="form-select">
+                            <option value="">Categoria</option>
+                            <option>Pães & Massas</option>
+                            <option>Carnes & Queijos</option>
+                            <option>Bebidas</option>
+                            <option>Hortifruti</option>
+                            <option>Embalagens</option>
+                            <option>Outros</option>
+                        </select>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button class="btn btn-yellow w-100 py-2" onclick="adicionarProduto()">➕ CADASTRAR PRODUTO NO ESTOQUE</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela -->
+            <div class="table-responsive">
+                <table class="table table-dark-custom w-100">
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Categoria</th>
+                            <th>Qtd</th>
+                            <th>Preço Unit.</th>
+                            <th>Subtotal</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaProdutos"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TELA: CONTROLE DE PONTO -->
+        <div id="controle" class="portal-tela">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                <h3 class="yellow-titulo mb-0">CONTROLE DE PONTO ELETRÔNICO</h3>
+                <div id="relogio" class="relogio-box"></div>
+            </div>
+
+            <div class="form-custom mb-4">
+                <div class="row g-2">
+                    <div class="col-md-6">
+                        <input type="text" id="nomePonto" class="form-control" placeholder="Nome completo do funcionário">
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" id="funcaoPonto" class="form-control" placeholder="Função / Cargo">
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <button class="btn btn-success w-100 fw-bold py-2" onclick="registrar('entrada')">🟢 REGISTRAR ENTRADA</button>
+                    </div>
+                    <div class="col-md-6 mt-3">
+                        <button class="btn btn-danger w-100 fw-bold py-2" onclick="registrar('saida')">🔴 REGISTRAR SAÍDA</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-dark-custom w-100">
+                    <thead>
+                        <tr>
+                            <th>Colaborador</th>
+                            <th>Função</th>
+                            <th>Data</th>
+                            <th>Entrada</th>
+                            <th>Saída</th>
+                            <th>Horas</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaPonto"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TELA: FUNCIONÁRIOS -->
+        <div id="funcionarios" class="portal-tela">
+            <h3 class="yellow-titulo mb-3">EQUIPE & QUADRO DE COLABORADORES</h3>
+
+            <div class="form-custom mb-4">
+                <div class="row g-2">
+                    <div class="col-md-4">
+                        <input type="text" id="nomeFuncionario" class="form-control" placeholder="Nome">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="cargo" class="form-control" placeholder="Cargo">
+                    </div>
+                    <div class="col-md-3">
+                        <input type="text" id="telefone" class="form-control" placeholder="Telefone">
+                    </div>
+                    <div class="col-md-2">
+                        <input type="number" id="salario" class="form-control" placeholder="Salário (R$)">
+                    </div>
+                    <div class="col-md-4 mt-2">
+                        <select id="status" class="form-select">
+                            <option value="Ativo">🟢 Ativo</option>
+                            <option value="Desativado">🔴 Desativado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8 mt-2">
+                        <button class="btn btn-yellow w-100 py-2" onclick="cadastrarFuncionario()">CADASTRAR FUNCIONÁRIO</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-dark-custom w-100">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>Cargo</th>
+                            <th>Telefone</th>
+                            <th>Salário</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelaFuncionarios"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- TELA: RH -->
+        <div id="rh" class="portal-tela">
+            <h3 class="yellow-titulo mb-3">RECURSOS HUMANOS</h3>
+            <div class="card card-dark-custom p-4 text-center">
+                <p class="yellow-text mb-0">Módulo de RH e folha de pagamento em desenvolvimento.</p>
+            </div>
+        </div>
+
+        <!-- TELA: MESAS -->
+        <div id="mesas" class="portal-tela">
+            <h3 class="yellow-titulo mb-3">SALÃO & MESAS</h3>
+            <div class="card card-dark-custom p-4 text-center">
+                <p class="yellow-text mb-0">Módulo de mapa de mesas em desenvolvimento.</p>
+            </div>
+        </div>
+
+        <!-- TELA: PEDIDOS -->
+        <div id="pedidos" class="portal-tela">
+            <h3 class="yellow-titulo mb-3">PEDIDOS DA COZINHA</h3>
+            <div class="card card-dark-custom p-4 text-center">
+                <p class="yellow-text mb-0">Módulo de expedição e pedidos em desenvolvimento.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- RODAPÉ IDENTICO AO INDEX -->
+    <footer>
+        <div class="footer-links">
+            <a href="index.html">Home</a>
+            <a href="ondeEstamos.html">Onde Estamos</a>
+            <a href="principaisOp.html">Especialidades da Casa</a>
+            <a href="vini.html">Área do Funcionário</a>
+        </div>
+        <div class="footer-bottom">
+            <p class="copyright">Desde 1990 servindo clássicos para toda a família.</p>
+        </div>
+    </footer>
+
+    <!-- BOOTSTRAP JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- SCRIPTS DA APLICAÇÃO -->
+    <script>
+    /* NAVEGAÇÃO ENTRE TELAS */
+    function mostrarTela(id, elementoBtn){
+        document.querySelectorAll(".portal-tela").forEach(t => t.classList.remove("ativa"));
+        document.querySelectorAll(".portal-tab-btn").forEach(b => b.classList.remove("active"));
+
+        const tela = document.getElementById(id);
+        if(tela) tela.classList.add("ativa");
+
+        if(elementoBtn){
+            elementoBtn.classList.add("active");
+        }
+    }
+
+    function selecionarAba(id){
+        const botoes = document.querySelectorAll(".portal-tab-btn");
+        botoes.forEach(btn => {
+            if(btn.getAttribute("onclick").includes(id)){
+                btn.click();
+            }
+        });
+    }
+
+    /* RELÓGIO DIGITAL */
+    function atualizarRelogio(){
+        const agora = new Date();
+        const data = agora.toLocaleDateString();
+        const hora = agora.toLocaleTimeString();
+        document.getElementById("relogio").innerText = `${data} • ${hora}`;
+    }
+    setInterval(atualizarRelogio, 1000);
+    atualizarRelogio();
+
+    /* =====================================================
+       CONTROLE DE PONTO (PERSISTÊNCIA COMPLETA)
+    ===================================================== */
+    let registrosPonto = JSON.parse(localStorage.getItem("yg_ponto")) || [];
+
+    function registrar(tipo){
+        const nome = document.getElementById("nomePonto").value.trim();
+        const funcao = document.getElementById("funcaoPonto").value.trim();
+
+        if(!nome){
+            alert("Informe o nome do funcionário!");
+            return;
+        }
+
+        const agora = new Date();
+        const dataAtual = agora.toLocaleDateString();
+        const horaAtual = agora.toLocaleTimeString();
+
+        if(tipo === "entrada"){
+            registrosPonto.push({
+                nome,
+                funcao: funcao || "Geral",
+                data: dataAtual,
+                entrada: horaAtual,
+                saida: "",
+                total: ""
+            });
+        } else if(tipo === "saida"){
+            let encontrado = false;
+            for(let i = registrosPonto.length - 1; i >= 0; i--){
+                if(registrosPonto[i].nome.toLowerCase() === nome.toLowerCase() && !registrosPonto[i].saida){
+                    registrosPonto[i].saida = horaAtual;
+                    registrosPonto[i].total = calcularHoras(registrosPonto[i].entrada, horaAtual);
+                    encontrado = true;
+                    break;
+                }
+            }
+            if(!encontrado){
+                alert("Nenhuma entrada em aberto encontrada para este funcionário.");
+                return;
+            }
+        }
+
+        localStorage.setItem("yg_ponto", JSON.stringify(registrosPonto));
+        renderizarPonto();
+    }
+
+    function calcularHoras(entrada, saida){
+        const [h1, m1, s1] = entrada.split(":").map(Number);
+        const [h2, m2, s2] = saida.split(":").map(Number);
+        const inicio = new Date(0, 0, 0, h1, m1, s1);
+        const fim = new Date(0, 0, 0, h2, m2, s2);
+        const diff = (fim - inicio) / 1000 / 60 / 60;
+        return diff.toFixed(2) + "h";
+    }
+
+    function deletarPonto(index){
+        registrosPonto.splice(index, 1);
+        localStorage.setItem("yg_ponto", JSON.stringify(registrosPonto));
+        renderizarPonto();
+    }
+
+    function renderizarPonto(){
+        const tabela = document.getElementById("tabelaPonto");
+        tabela.innerHTML = "";
+
+        if(registrosPonto.length === 0){
+            tabela.innerHTML = `<tr><td colspan="7" class="text-secondary py-3">Nenhum ponto registrado hoje.</td></tr>`;
+            return;
+        }
+
+        registrosPonto.forEach((r, i) => {
+            tabela.innerHTML += `
+                <tr>
+                    <td>${r.nome}</td>
+                    <td>${r.funcao}</td>
+                    <td>${r.data}</td>
+                    <td>${r.entrada}</td>
+                    <td>${r.saida || '<span class="badge bg-warning text-dark">Em aberto</span>'}</td>
+                    <td>${r.total || '-'}</td>
+                    <td>
+                        <button class="btn btn-outline-danger btn-sm" onclick="deletarPonto(${i})">Excluir</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    /* =====================================================
+       CONTROLE DE ESTOQUE
+    ===================================================== */
+    let estoque = JSON.parse(localStorage.getItem("yg_estoque")) || [];
+
+    function adicionarProduto(){
+        const produto = document.getElementById("produto").value.trim();
+        const quantidade = document.getElementById("quantidade").value;
+        const preco = document.getElementById("preco").value;
+        const categoria = document.getElementById("categoria").value;
+
+        if(!produto || !quantidade || !preco || !categoria){
+            alert("Preencha todos os campos do produto!");
+            return;
+        }
+
+        estoque.push({
+            produto,
+            quantidade: Number(quantidade),
+            preco: Number(preco),
+            categoria
+        });
+
+        localStorage.setItem("yg_estoque", JSON.stringify(estoque));
+        limparCamposEstoque();
+        renderizarEstoque();
+    }
+
+    function limparCamposEstoque(){
+        document.getElementById("produto").value = "";
+        document.getElementById("quantidade").value = "";
+        document.getElementById("preco").value = "";
+        document.getElementById("categoria").value = "";
+    }
+
+    function getBadgeStatus(qtd){
+        if(qtd <= 5) return `<span class="badge-baixo">CRÍTICO</span>`;
+        if(qtd <= 15) return `<span class="badge-medio">ATENÇÃO</span>`;
+        return `<span class="badge-alto">OK</span>`;
+    }
+
+    function renderizarEstoque(){
+        const tabela = document.getElementById("tabelaProdutos");
+        tabela.innerHTML = "";
+
+        let baixo = 0;
+        let valorTotal = 0;
+
+        if(estoque.length === 0){
+            tabela.innerHTML = `<tr><td colspan="7" class="text-secondary py-3">Nenhum produto cadastrado no estoque.</td></tr>`;
+        }
+
+        estoque.forEach((item, index) => {
+            if(item.quantidade <= 5) baixo++;
+            const totalItem = item.quantidade * item.preco;
+            valorTotal += totalItem;
+
+            tabela.innerHTML += `
+                <tr>
+                    <td class="fw-bold text-start ps-3">${item.produto}</td>
+                    <td>${item.categoria}</td>
+                    <td>${item.quantidade}</td>
+                    <td>R$ ${item.preco.toFixed(2)}</td>
+                    <td>R$ ${totalItem.toFixed(2)}</td>
+                    <td>${getBadgeStatus(item.quantidade)}</td>
+                    <td>
+                        <button class="btn btn-outline-warning btn-sm me-1" onclick="editarProduto(${index})">✏️</button>
+                        <button class="btn btn-outline-danger btn-sm" onclick="deletarProduto(${index})">🗑️</button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        document.getElementById("totalProdutos").innerText = estoque.length;
+        document.getElementById("baixoEstoque").innerText = baixo;
+        document.getElementById("valorTotal").innerText = `R$ ${valorTotal.toFixed(2)}`;
+    }
+
+    function deletarProduto(index){
+        if(confirm("Remover este item do estoque?")){
+            estoque.splice(index, 1);
+            localStorage.setItem("yg_estoque", JSON.stringify(estoque));
+            renderizarEstoque();
+        }
+    }
+
+    function editarProduto(index){
+        const item = estoque[index];
+        const novoNome = prompt("Nome do produto:", item.produto);
+        const novaQtd = prompt("Quantidade em estoque:", item.quantidade);
+        const novoPreco = prompt("Preço unitário (R$):", item.preco);
+
+        if(novoNome !== null && novaQtd !== null && novoPreco !== null){
+            estoque[index].produto = novoNome;
+            estoque[index].quantidade = Number(novaQtd);
+            estoque[index].preco = Number(novoPreco);
+            localStorage.setItem("yg_estoque", JSON.stringify(estoque));
+            renderizarEstoque();
+        }
+    }
+
+    /* =====================================================
+       CADASTRO DE FUNCIONÁRIOS (COM LOCALSTORAGE)
+    ===================================================== */
+    let funcionarios = JSON.parse(localStorage.getItem("yg_funcionarios")) || [];
+
+    function cadastrarFuncionario(){
+        const nome = document.getElementById("nomeFuncionario").value.trim();
+        const cargo = document.getElementById("cargo").value.trim();
+        const telefone = document.getElementById("telefone").value.trim();
+        const salario = document.getElementById("salario").value;
+        const status = document.getElementById("status").value;
+
+        if(!nome || !cargo || !telefone || !salario){
+            alert("Preencha todos os campos do funcionário!");
+            return;
+        }
+
+        funcionarios.push({
+            nome,
+            cargo,
+            telefone,
+            salario: Number(salario),
+            status
+        });
+
+        localStorage.setItem("yg_funcionarios", JSON.stringify(funcionarios));
+        limparCamposFuncionario();
+        renderizarFuncionarios();
+    }
+
+    function limparCamposFuncionario(){
+        document.getElementById("nomeFuncionario").value = "";
+        document.getElementById("cargo").value = "";
+        document.getElementById("telefone").value = "";
+        document.getElementById("salario").value = "";
+        document.getElementById("status").value = "Ativo";
+    }
+
+    function deletarFuncionario(index){
+        if(confirm("Deseja excluir este colaborador?")){
+            funcionarios.splice(index, 1);
+            localStorage.setItem("yg_funcionarios", JSON.stringify(funcionarios));
+            renderizarFuncionarios();
+        }
+    }
+
+    function renderizarFuncionarios(){
+        const tabela = document.getElementById("tabelaFuncionarios");
+        tabela.innerHTML = "";
+
+        if(funcionarios.length === 0){
+            tabela.innerHTML = `<tr><td colspan="6" class="text-secondary py-3">Nenhum funcionário cadastrado.</td></tr>`;
+            return;
+        }
+
+        funcionarios.forEach((f, i) => {
+            const badgeStatus = f.status === "Ativo" 
+                ? '<span class="badge bg-success">Ativo</span>' 
+                : '<span class="badge bg-secondary">Desativado</span>';
+
+            tabela.innerHTML += `
+                <tr>
+                    <td class="text-start ps-3 fw-bold">${f.nome}</td>
+                    <td>${f.cargo}</td>
+                    <td>${f.telefone}</td>
+                    <td>R$ ${f.salario.toFixed(2)}</td>
+                    <td>${badgeStatus}</td>
+                    <td>
+                        <button class="btn btn-outline-danger btn-sm" onclick="deletarFuncionario(${i})">Excluir</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    /* INICIALIZAÇÃO */
+    renderizarPonto();
+    renderizarEstoque();
+    renderizarFuncionarios();
+    </script>
+</body>
+</html>
