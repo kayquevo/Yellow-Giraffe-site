@@ -45,3 +45,39 @@ Siga o passo a passo abaixo para visualizar o site diretamente no seu computador
 
 > ℹ️ **Acesso aos Painéis Internos:**  
 > Para consultar os dashboards operacionais, controle de ponto e gestão de estoque, clique em **"Área de Funcionário"** no rodapé da página inicial ou abra diretamente o arquivo **`vini.html`**.
+
+
+# 📋Mudanças
+
+### 🧹 Limpeza e Ajustes de Escopo
+- [ ] Remover o módulo de **Controle de Ponto** (desnecessário no momento).
+- [ ] Remover temporariamente as abas **RH**, **Mesas** e **Pedidos** (aguardando definição futura).
+
+---
+
+### 📦 Módulo de Estoque
+- [ ] Tornar o campo **Preço Unitário** não obrigatório no cadastro de produtos.
+- [ ] Ocultar a coluna/valores de preços e valor total para o cargo de **Copeiro**.
+- [ ] Permitir a visualização de preços e totais financeiros exclusivamente para o **Gerente**.
+- [ ] Restringir a permissão de alteração (adicionar, editar, excluir itens) apenas para **Gerente** e **Copeiro** (outros cargos apenas visualizam).
+
+---
+
+### 👥 Módulo de Funcionários
+- [ ] Ocultar a aba e o acesso a **Funcionários** para todos os cargos, deixando visível somente para o **Gerente**.
+
+---
+
+### 🗄️ Autenticação & Banco de Dados
+- [ ] Implementar sistema de login com validação de credenciais e identificação de cargos.
+- [ ] Conectar banco de dados centralizado para persistência de logins e dados operacionais (estoque, funcionários, dashboard).
+
+---
+
+### 💡 Ideia Futura: Escala & Turnos da Equipe
+
+- [ ] **Quadro Interativo de Escalas:** Substituir o controle de ponto por uma tabela visual com os turnos de trabalho e dias de folga de cada colaborador.
+- [ ] **Controle de Acesso da Escala:** Permitir a visualização de turnos para toda a equipe, mas restringir a edição e alterações apenas para usuários autorizados (ex: Gerente).
+
+
+
