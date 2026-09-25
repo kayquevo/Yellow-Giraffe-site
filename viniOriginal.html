@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Restaurante</title>
+    <style>
+        /* RESET & BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1993b2, #084c01);
+            min-height: 100vh;
+            display: flex;
+            color: #111;
+        }
+
+        /* MENU LATERAL */
+        .menu {
+            width: 260px;
+            background: #084c01;
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            flex-shrink: 0;
+        }
+
+        .menu h2 {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .menu button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: none;
+            background: #149b02;
+            color: white;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: 0.3s;
+            font-weight: bold;
+            font-size: 15px;
+            text-align: left;
+        }
+
+        .menu button:hover {
+            background: #b7d304;
+            color: #000;
+        }
+
+        /* ÁREA DE CONTEÚDO */
+        .conteudo {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tela {
+            display: none;
+        }
+
+        .ativa {
+            display: block;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        /* CARDS */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            color: #111;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            background: #f0fdf4;
+        }
+
+        .card h2 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        /* FORMULÁRIOS */
+        .formulario {
+            background: white;
+            color: #111;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            align-items: center;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        button {
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-add {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-add:hover {
+            background: #218838;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            padding: 6px 12px;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+        }
+
+        .btn-edit {
+            background: #007bff;
+            color: white;
+            padding: 6px 12px;
+            margin-right: 4px;
+        }
+
+        .btn-edit:hover {
+            background: #0069d9;
+        }
+
+        .entrada {
+            background: #0ba923;
+            color: white;
+        }
+
+        .saida {
+            background: #f44336;
+            color: white;
+        }
+
+        /* TABELAS */
+        .table-responsive {
+            overflow-x: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            color: #111;
+        }
+
+        table th {
+            background: #007bff;
+            color: white;
+            padding: 14px;
+            font-size: 14px;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* BADGES DE STATUS */
+        .baixo {
+            background: #ffb3b3;
+            color: #b30000;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .medio {
+            background: #fff3cd;
+            color: #856404;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .alto {
+            background: #c3f7d0;
+            color: #155724;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        #relogio {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .placeholder-text {
+            color: white;
+            font-size: 16px;
+        }
+
+        @media(max-width: 768px) {
+            body {
+                flex-direction: column;
+            }
+            .menu {
+                width: 100%;
+                min-height: auto;
+            }
+            .conteudo {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MENU LATERAL -->
+    <nav class="menu">
+        <h2>🍽 Restaurante</h2>
+        <button onclick="mostrarTela('dashboard')">📊 Dashboard</button>
+        <button onclick="mostrarTela('estoque')">📦 Estoque</button>
+        <button onclick="mostrarTela('funcionarios')">👨‍🍳 Funcionários</button>
+        <button onclick="mostrarTela('controle')">⏰ Controle de Ponto</button>
+        <button onclick="mostrarTela('rh')">🏢 RH</button>
+        <button onclick="mostrarTela('mesas')">🪑 Mesas</button>
+        <button onclick="mostrarTela('pedidos')">🧾 Pedidos</button>
+    </nav>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="conteudo">
+        <div class="container">
+
+            <!-- TELA: DASHBOARD -->
+            <section id="dashboard" class="tela ativa">
+                <h1>🏪 Portal do Restaurante</h1>
+                <div class="cards">
+                    <div class="card" onclick="mostrarTela('controle')">
+                        <h2>⏰ Controle de Ponto</h2>
+                        <p>Entrada e saída</p>
+                    </div>
+                    <div class="card" onclick="mostrarTela('funcionarios')">
+                        <h2>👨‍🍳 Funcionários</h2>
+                        <p>Gestão da equipe</p>
+                    </div>
+                    <div class="card" onclick="mostrarTela('estoque')">
+                        <h2>📦 Estoque</h2>
+                        <p>Controle de insumos</p>
+                    </div>
+                    <div class="card" onclick="mostrarTela('mesas')">
+                        <h2>🪑 Mesas</h2>
+                        <p>Status do salão</p>
+                    </div>
+                    <div class="card" onclick="mostrarTela('pedidos')">
+                        <h2>🧾 Pedidos</h2>
+                        <p>Fila da cozinha</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TELA: ESTOQUE -->
+            <section id="estoque" class="tela">
+                <h1>📦 Estoque</h1>
+
+                <div class="cards">
+                    <div class="card">
+                        <h2>Total de Produtos</h2>
+                        <p id="totalProdutos">0</p>
+                    </div>
+                    <div class="card">
+                        <h2>Itens em Baixa</h2>
+                        <p id="baixoEstoque" style="color: #dc3545;">0</p>
+                    </div>
+                    <div class="card">
+                        <h2>Valor Total</h2>
+                        <p id="valorTotal">R$ 0,00</p>
+                    </div>
+                </div>
+
+                <div class="formulario">
+                    <h3 style="margin-bottom: 15px;">Adicionar Novo Produto</h3>
+                    <div class="form-grid">
+                        <input type="text" id="produto" placeholder="Nome do Produto">
+                        <input type="number" id="quantidade" placeholder="Quantidade">
+                        <input type="number" id="preco" step="0.01" placeholder="Preço Unitário">
+                        <select id="categoria">
+                            <option value="">Selecione a Categoria</option>
+                            <option>Bebidas</option>
+                            <option>Carnes</option>
+                            <option>Massas</option>
+                            <option>Hortifruti</option>
+                            <option>Limpeza</option>
+                            <option>Outros</option>
+                        </select>
+                        <button class="btn-add" onclick="adicionarProduto()">➕ Adicionar Produto</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Categoria</th>
+                                <th>Quantidade</th>
+                                <th>Preço Unit.</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaProdutos"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TELA: CONTROLE DE PONTO -->
+            <section id="controle" class="tela">
+                <h1>⏰ Controle de Ponto</h1>
+
+                <div class="formulario">
+                    <div id="relogio"></div>
+                    <div class="form-grid">
+                        <input type="text" id="nomePonto" placeholder="Nome do funcionário">
+                        <input type="text" id="funcaoPonto" placeholder="Função">
+                        <button class="entrada" onclick="registrarPonto('entrada')">🟢 Registrar Entrada</button>
+                        <button class="saida" onclick="registrarPonto('saida')">🔴 Registrar Saída</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Função</th>
+                                <th>Data</th>
+                                <th>Entrada</th>
+                                <th>Saída</th>
+                                <th>Total (Horas)</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaPonto"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TELA: FUNCIONÁRIOS -->
+            <section id="funcionarios" class="tela">
+                <h1>👨‍🍳 Cadastro de Funcionários</h1>
+
+                <div class="formulario">
+                    <div class="form-grid">
+                        <input type="text" id="nomeFuncionario" placeholder="Nome">
+                        <input type="text" id="cargo" placeholder="Cargo">
+                        <input type="text" id="telefone" placeholder="Telefone">
+                        <input type="number" id="salario" step="0.01" placeholder="Salário">
+                        <select id="status">
+                            <option value="Ativo">✔️ Ativo</option>
+                            <option value="Desativado">❌ Desativado</option>
+                        </select>
+                        <button class="btn-add" onclick="cadastrarFuncionario()">➕ Cadastrar</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Cargo</th>
+                                <th>Telefone</th>
+                                <th>Salário</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaFuncionarios"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- TELAS EM CONSTRUÇÃO -->
+            <section id="rh" class="tela">
+                <h1>🏢 RH</h1>
+                <p class="placeholder-text">Área de Recursos Humanos em desenvolvimento.</p>
+            </section>
+
+            <section id="mesas" class="tela">
+                <h1>🪑 Controle de Mesas</h1>
+                <p class="placeholder-text">Área de mesas em desenvolvimento.</p>
+            </section>
+
+            <section id="pedidos" class="tela">
+                <h1>🧾 Pedidos</h1>
+                <p class="placeholder-text">Área de pedidos em desenvolvimento.</p>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        /* NAVEGAÇÃO */
+        function mostrarTela(id) {
+            document.querySelectorAll(".tela").forEach(tela => tela.classList.remove("ativa"));
+            const destino = document.getElementById(id);
+            if (destino) destino.classList.add("ativa");
+        }
+
+        /* RELÓGIO */
+        function atualizarRelogio() {
+            const agora = new Date();
+            const relogio = document.getElementById("relogio");
+            if (relogio) {
+                relogio.innerText = `📅 ${agora.toLocaleDateString()} • ⏰ ${agora.toLocaleTimeString()}`;
+            }
+        }
+        setInterval(atualizarRelogio, 1000);
+        atualizarRelogio();
+
+        /* CONTROLE DE PONTO */
+        let registrosPonto = JSON.parse(localStorage.getItem("ponto")) || [];
+
+        function registrarPonto(tipo) {
+            const nome = document.getElementById("nomePonto").value.trim();
+            const funcao = document.getElementById("funcaoPonto").value.trim() || "Geral";
+
+            if (!nome) {
+                alert("Informe o nome do funcionário!");
+                return;
+            }
+
+            const agora = new Date();
+            const dataAtual = agora.toLocaleDateString();
+            const horaAtual = agora.toLocaleTimeString();
+
+            if (tipo === "entrada") {
+                registrosPonto.push({ nome, funcao, data: dataAtual, entrada: horaAtual, saida: "", total: "" });
+            } else if (tipo === "saida") {
+                let encontrado = false;
+                for (let i = registrosPonto.length - 1; i >= 0; i--) {
+                    if (registrosPonto[i].nome.toLowerCase() === nome.toLowerCase() && !registrosPonto[i].saida) {
+                        registrosPonto[i].saida = horaAtual;
+                        registrosPonto[i].total = calcularHoras(registrosPonto[i].entrada, horaAtual);
+                        encontrado = true;
+                        break;
+                    }
+                }
+                if (!encontrado) {
+                    alert("Nenhum registro de entrada aberto encontrado para este colaborador.");
+                    return;
+                }
+            }
+
+            localStorage.setItem("ponto", JSON.stringify(registrosPonto));
+            renderizarPonto();
+        }
+
+        function calcularHoras(entrada, saida) {
+            const [h1, m1, s1] = entrada.split(":").map(Number);
+            const [h2, m2, s2] = saida.split(":").map(Number);
+            const inicio = new Date(0, 0, 0, h1, m1, s1);
+            const fim = new Date(0, 0, 0, h2, m2, s2);
+            return ((fim - inicio) / 1000 / 60 / 60).toFixed(2) + "h";
+        }
+
+        function deletarPonto(index) {
+            registrosPonto.splice(index, 1);
+            localStorage.setItem("ponto", JSON.stringify(registrosPonto));
+            renderizarPonto();
+        }
+
+        function renderizarPonto() {
+            const tabela = document.getElementById("tabelaPonto");
+            tabela.innerHTML = "";
+
+            if (registrosPonto.length === 0) {
+                tabela.innerHTML = `<tr><td colspan="7">Nenhum ponto registrado hoje.</td></tr>`;
+                return;
+            }
+
+            registrosPonto.forEach((r, i) => {
+                tabela.innerHTML += `
+                    <tr>
+                        <td>${r.nome}</td>
+                        <td>${r.funcao}</td>
+                        <td>${r.data}</td>
+                        <td>${r.entrada}</td>
+                        <td>${r.saida || '<span class="medio">Em aberto</span>'}</td>
+                        <td>${r.total || '-'}</td>
+                        <td><button class="btn-delete" onclick="deletarPonto(${i})">Excluir</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        /* FUNCIONÁRIOS */
+        let funcionarios = JSON.parse(localStorage.getItem("funcionarios")) || [];
+
+        function cadastrarFuncionario() {
+            const nome = document.getElementById("nomeFuncionario").value.trim();
+            const cargo = document.getElementById("cargo").value.trim();
+            const telefone = document.getElementById("telefone").value.trim();
+            const salario = document.getElementById("salario").value;
+            const status = document.getElementById("status").value;
+
+            if (!nome || !cargo || !telefone || !salario) {
+                alert("Preencha todos os campos do funcionário!");
+                return;
+            }
+
+            funcionarios.push({
+                nome,
+                cargo,
+                telefone,
+                salario: Number(salario),
+                status
+            });
+
+            localStorage.setItem("funcionarios", JSON.stringify(funcionarios));
+            limparFormFuncionario();
+            renderizarFuncionarios();
+        }
+
+        function limparFormFuncionario() {
+            document.getElementById("nomeFuncionario").value = "";
+            document.getElementById("cargo").value = "";
+            document.getElementById("telefone").value = "";
+            document.getElementById("salario").value = "";
+            document.getElementById("status").value = "Ativo";
+        }
+
+        function deletarFuncionario(index) {
+            if (confirm("Deseja remover este colaborador?")) {
+                funcionarios.splice(index, 1);
+                localStorage.setItem("funcionarios", JSON.stringify(funcionarios));
+                renderizarFuncionarios();
+            }
+        }
+
+        function renderizarFuncionarios() {
+            const tabela = document.getElementById("tabelaFuncionarios");
+            tabela.innerHTML = "";
+
+            if (funcionarios.length === 0) {
+                tabela.innerHTML = `<tr><td colspan="6">Nenhum funcionário cadastrado.</td></tr>`;
+                return;
+            }
+
+            funcionarios.forEach((f, i) => {
+                const statusBadge = f.status === "Ativo" ? `<span class="alto">Ativo</span>` : `<span class="baixo">Desativado</span>`;
+                tabela.innerHTML += `
+                    <tr>
+                        <td>${f.nome}</td>
+                        <td>${f.cargo}</td>
+                        <td>${f.telefone}</td>
+                        <td>R$ ${Number(f.salario).toFixed(2)}</td>
+                        <td>${statusBadge}</td>
+                        <td><button class="btn-delete" onclick="deletarFuncionario(${i})">Excluir</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        /* ESTOQUE */
+        let estoque = JSON.parse(localStorage.getItem("estoque")) || [];
+
+        function adicionarProduto() {
+            const produto = document.getElementById("produto").value.trim();
+            const quantidade = document.getElementById("quantidade").value;
+            const preco = document.getElementById("preco").value;
+            const categoria = document.getElementById("categoria").value;
+
+            if (!produto || !quantidade || !categoria) {
+                alert("Preencha ao menos o nome, quantidade e categoria!");
+                return;
+            }
+
+            estoque.push({
+                produto,
+                quantidade: Number(quantidade),
+                preco: Number(preco) || 0,
+                categoria
+            });
+
+            localStorage.setItem("estoque", JSON.stringify(estoque));
+            limparFormEstoque();
+            renderizarEstoque();
+        }
+
+        function limparFormEstoque() {
+            document.getElementById("produto").value = "";
+            document.getElementById("quantidade").value = "";
+            document.getElementById("preco").value = "";
+            document.getElementById("categoria").value = "";
+        }
+
+        function getStatusEstoque(qtd) {
+            if (qtd <= 5) return `<span class="baixo">BAIXO</span>`;
+            if (qtd <= 15) return `<span class="medio">MÉDIO</span>`;
+            return `<span class="alto">ALTO</span>`;
+        }
+
+        function renderizarEstoque() {
+            const tabela = document.getElementById("tabelaProdutos");
+            tabela.innerHTML = "";
+
+            let baixo = 0;
+            let totalSoma = 0;
+
+            if (estoque.length === 0) {
+                tabela.innerHTML = `<tr><td colspan="7">Nenhum produto em estoque.</td></tr>`;
+            }
+
+            estoque.forEach((item, index) => {
+                if (item.quantidade <= 5) baixo++;
+                const subtotal = item.quantidade * item.preco;
+                totalSoma += subtotal;
+
+                tabela.innerHTML += `
+                    <tr>
+                        <td>${item.produto}</td>
+                        <td>${item.categoria}</td>
+                        <td>${item.quantidade}</td>
+                        <td>R$ ${item.preco.toFixed(2)}</td>
+                        <td>R$ ${subtotal.toFixed(2)}</td>
+                        <td>${getStatusEstoque(item.quantidade)}</td>
+                        <td>
+                            <button class="btn-edit" onclick="editarProduto(${index})">✏️</button>
+                            <button class="btn-delete" onclick="deletarProduto(${index})">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById("totalProdutos").innerText = estoque.length;
+            document.getElementById("baixoEstoque").innerText = baixo;
+            document.getElementById("valorTotal").innerText = `R$ ${totalSoma.toFixed(2)}`;
+        }
+
+        function deletarProduto(index) {
+            if (confirm("Deseja remover este produto?")) {
+                estoque.splice(index, 1);
+                localStorage.setItem("estoque", JSON.stringify(estoque));
+                renderizarEstoque();
+            }
+        }
+
+        function editarProduto(index) {
+            const item = estoque[index];
+            const novoNome = prompt("Nome do produto:", item.produto);
+            const novaQtd = prompt("Quantidade:", item.quantidade);
+            const novoPreco = prompt("Preço Unitário (R$):", item.preco);
+
+            if (novoNome !== null && novaQtd !== null && novoPreco !== null) {
+                estoque[index].produto = novoNome.trim();
+                estoque[index].quantidade = Number(novaQtd) || 0;
+                estoque[index].preco = Number(novoPreco) || 0;
+
+                localStorage.setItem("estoque", JSON.stringify(estoque));
+                renderizarEstoque();
+            }
+        }
+
+        /* INICIALIZAÇÃO */
+        renderizarPonto();
+        renderizarFuncionarios();
+        renderizarEstoque();
+    </script>
+</body>
+</html>
