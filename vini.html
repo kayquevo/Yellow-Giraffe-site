@@ -58,9 +58,6 @@
             <button class="portal-tab-btn" onclick="mostrarTela('estoque', this)">ESTOQUE</button>
             <button class="portal-tab-btn" onclick="mostrarTela('funcionarios', this)">FUNCIONÁRIOS</button>
             <button class="portal-tab-btn" onclick="mostrarTela('controle', this)">CONTROLE DE PONTO</button>
-            <button class="portal-tab-btn" onclick="mostrarTela('rh', this)">RH</button>
-            <button class="portal-tab-btn" onclick="mostrarTela('mesas', this)">MESAS</button>
-            <button class="portal-tab-btn" onclick="mostrarTela('pedidos', this)">PEDIDOS</button>
         </div>
     </div>
 
@@ -71,12 +68,7 @@
         <div id="dashboard" class="portal-tela ativa">
             <h3 class="yellow-titulo mb-3">VISÃO GERAL DO RESTAURANTE</h3>
             <div class="row g-3">
-                <div class="col-md-4 col-sm-6">
-                    <div class="card card-dark-custom p-3 text-center h-100 cursor-pointer" onclick="selecionarAba('controle')">
-                        <h4 class="card-title">⏰ PONTO</h4>
-                        <p class="card-text mb-0">Registro rápido de entrada e saída da equipe</p>
-                    </div>
-                </div>
+
                 <div class="col-md-4 col-sm-6">
                     <div class="card card-dark-custom p-3 text-center h-100 cursor-pointer" onclick="selecionarAba('estoque')">
                         <h4 class="card-title">📦 ESTOQUE</h4>
@@ -89,18 +81,14 @@
                         <p class="card-text mb-0">Gestão e cadastro de colaboradores</p>
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-6">
-                    <div class="card card-dark-custom p-3 text-center h-100 cursor-pointer" onclick="selecionarAba('mesas')">
-                        <h4 class="card-title">🪑 SALÃO & MESAS</h4>
-                        <p class="card-text mb-0">Status de ocupação em tempo real</p>
+
+                <div class="col-md-4 col-sm-6">
+                    <div class="card card-dark-custom p-3 text-center h-100 cursor-pointer" onclick="selecionarAba('controle')">
+                        <h4 class="card-title">⏰ PONTO</h4>
+                        <p class="card-text mb-0">Registro rápido de entrada e saída da equipe</p>
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-12">
-                    <div class="card card-dark-custom p-3 text-center h-100 cursor-pointer" onclick="selecionarAba('pedidos')">
-                        <h4 class="card-title">🧾 PEDIDOS & DELIVERY</h4>
-                        <p class="card-text mb-0">Acompanhamento dos pedidos para a cozinha</p>
-                    </div>
-                </div>
+
             </div>
         </div>
 
@@ -268,39 +256,13 @@
             </div>
         </div>
 
-        <!-- TELA: RH -->
-        <div id="rh" class="portal-tela">
-            <h3 class="yellow-titulo mb-3">RECURSOS HUMANOS</h3>
-            <div class="card card-dark-custom p-4 text-center">
-                <p class="yellow-text mb-0">Módulo de RH e folha de pagamento em desenvolvimento.</p>
-            </div>
-        </div>
-
-        <!-- TELA: MESAS -->
-        <div id="mesas" class="portal-tela">
-            <h3 class="yellow-titulo mb-3">SALÃO & MESAS</h3>
-            <div class="card card-dark-custom p-4 text-center">
-                <p class="yellow-text mb-0">Módulo de mapa de mesas em desenvolvimento.</p>
-            </div>
-        </div>
-
-        <!-- TELA: PEDIDOS -->
-        <div id="pedidos" class="portal-tela">
-            <h3 class="yellow-titulo mb-3">PEDIDOS DA COZINHA</h3>
-            <div class="card card-dark-custom p-4 text-center">
-                <p class="yellow-text mb-0">Módulo de expedição e pedidos em desenvolvimento.</p>
-            </div>
-        </div>
 
     </div>
 
     <!-- RODAPÉ IDENTICO AO INDEX -->
     <footer>
         <div class="footer-links">
-            <a href="index.html">Home</a>
-            <a href="ondeEstamos.html">Onde Estamos</a>
-            <a href="principaisOp.html">Especialidades da Casa</a>
-            <a href="vini.html">Área do Funcionário</a>
+            <a href="viniOriginal.html">Dashboard original</a>
         </div>
         <div class="footer-bottom">
             <p class="copyright">Desde 1990 servindo clássicos para toda a família.</p>
@@ -443,7 +405,7 @@
         const preco = document.getElementById("preco").value;
         const categoria = document.getElementById("categoria").value;
 
-        if(!produto || !quantidade || !preco || !categoria){
+        if(!produto || !quantidade || !categoria){
             alert("Preencha todos os campos do produto!");
             return;
         }
@@ -522,12 +484,11 @@
         const item = estoque[index];
         const novoNome = prompt("Nome do produto:", item.produto);
         const novaQtd = prompt("Quantidade em estoque:", item.quantidade);
-        const novoPreco = prompt("Preço unitário (R$):", item.preco);
-
+        const novoPreco = prompt("Preço unitário (R$) - Opcional:", item.preco || 0);
         if(novoNome !== null && novaQtd !== null && novoPreco !== null){
             estoque[index].produto = novoNome;
             estoque[index].quantidade = Number(novaQtd);
-            estoque[index].preco = Number(novoPreco);
+            estoque[index].preco = novoPreco ? Number(novoPreco) : 0;
             localStorage.setItem("yg_estoque", JSON.stringify(estoque));
             renderizarEstoque();
         }
