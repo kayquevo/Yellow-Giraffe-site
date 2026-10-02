@@ -28,13 +28,12 @@ O portal administrativo e operacional da empresa fica localizado no arquivo:
 # 📋Mudanças
 
 ### 🧹 Limpeza e Ajustes de Escopo
-- [ ] Remover o módulo de **Controle de Ponto** (desnecessário no momento).
-- [ ] Remover temporariamente as abas **RH**, **Mesas** e **Pedidos** (aguardando definição futura).
+- [X] Remover temporariamente as abas **RH**, **Mesas** e **Pedidos** (aguardando definição futura).
 
 ---
 
 ### 📦 Módulo de Estoque
-- [ ] Tornar o campo **Preço Unitário** não obrigatório no cadastro de produtos.
+- [X] Tornar o campo **Preço Unitário** não obrigatório no cadastro de produtos.
 - [ ] Ocultar a coluna/valores de preços e valor total para o cargo de **Copeiro**.
 - [ ] Permitir a visualização de preços e totais financeiros exclusivamente para o **Gerente**.
 - [ ] Restringir a permissão de alteração (adicionar, editar, excluir itens) apenas para **Gerente** e **Copeiro** (outros cargos apenas visualizam).
