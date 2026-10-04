@@ -15,12 +15,22 @@ Website institucional do restaurante **Yellow Giraffe**
 
 O portal administrativo e operacional da empresa fica localizado no arquivo:
 
-👉 **`vini.html`** *(acessível também pelo link **"Área do Funcionário"** no rodapé do site)*
+👉 **`dashboard.html`** *(acessível também pelo link **"Área do Funcionário"** no rodapé do site)*
+
+<img src="imgReadme/dashboard1.png" width="800px">
+
+* **Menu inicial:** Ponto central de navegação do sistema de gestão.
+* **Gerente:** Acesso total a todas as funções e configurações.
+* **Copeiro/Cozinheiro:** Acesso limitado ao dashboard operacional.
+
+---
+
+<img src="imgReadme/imgestoque.png" width="800px">
 
 ---
 
 > ℹ️ **Acesso aos Painéis Internos:**  
-> Para consultar os dashboards operacionais, controle de ponto e gestão de estoque, clique em **"Área de Funcionário"** no rodapé da página inicial ou abra diretamente o arquivo **`vini.html`**.
+> Para consultar os dashboards operacionais, controle de ponto e gestão de estoque, clique em **"Área de Funcionário"** no rodapé da página inicial ou abra diretamente o arquivo **`dashboard.html`**.
 
 ---
 
