@@ -34,14 +34,14 @@ O portal administrativo e operacional da empresa fica localizado no arquivo:
 
 ### 📦 Módulo de Estoque
 - [X] Tornar o campo **Preço Unitário** não obrigatório no cadastro de produtos.
-- [ ] Ocultar a coluna/valores de preços e valor total para o cargo de **Copeiro**.
-- [ ] Permitir a visualização de preços e totais financeiros exclusivamente para o **Gerente**.
-- [ ] Restringir a permissão de alteração (adicionar, editar, excluir itens) apenas para **Gerente** e **Copeiro** (outros cargos apenas visualizam).
+- [X] Ocultar a coluna/valores de preços e valor total para o cargo de **Copeiro**.
+- [X] Permitir a visualização de preços e totais financeiros exclusivamente para o **Gerente**.
+- [X] Restringir a permissão de alteração (adicionar, editar, excluir itens) apenas para **Gerente** e **Copeiro** (outros cargos apenas visualizam).
 
 ---
 
 ### 👥 Módulo de Funcionários
-- [ ] Ocultar a aba e o acesso a **Funcionários** para todos os cargos, deixando visível somente para o **Gerente**.
+- [X] Ocultar a aba e o acesso a **Funcionários** para todos os cargos, deixando visível somente para o **Gerente**.
 
 ---
 
