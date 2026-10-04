@@ -244,42 +244,91 @@ function aplicarPermissoes() {
         return `<span class="badge-alto">OK</span>`;
     }
 
-    function renderizarEstoque(){
-        const tabela = document.getElementById("tabelaProdutos");
-        tabela.innerHTML = "";
+function renderizarEstoque(){
+    const regras = regrasAcesso[cargoAtual];
+    const tabela = document.getElementById("tabelaProdutos");
+    const thead = document.querySelector("#estoque thead tr");
+    if (!tabela || !thead) return;
 
-        let baixo = 0;
-        let valorTotal = 0;
+    tabela.innerHTML = "";
 
-        if(estoque.length === 0){
-            tabela.innerHTML = `<tr><td colspan="7" class="text-secondary py-3">Nenhum produto cadastrado no estoque.</td></tr>`;
+    // 1. Monta o cabeçalho dinamicamente de acordo com as permissões do cargo
+    let cabecalhoHtml = `
+        <th>Produto</th>
+        <th>Categoria</th>
+        <th>Qtd</th>
+    `;
+    // Apenas Gerente vê as colunas de preços
+    if (regras.verValoresEstoque) {
+        cabecalhoHtml += `
+            <th>Preço Unit.</th>
+            <th>Subtotal</th>
+        `;
+    }
+    cabecalhoHtml += `<th>Status</th>`;
+    // Apenas quem pode editar (Gerente e Copeiro) vê a coluna de ações
+    if (regras.editarEstoque) {
+        cabecalhoHtml += `<th>Ações</th>`;
+    }
+    thead.innerHTML = cabecalhoHtml;
+
+    // 2. Calcula os totais e define o total de colunas para mensagens vazias
+    let baixo = 0;
+    let valorTotal = 0;
+    const totalColunas = 3 + (regras.verValoresEstoque ? 2 : 0) + (regras.editarEstoque ? 1 : 0);
+
+    if(estoque.length === 0){
+        tabela.innerHTML = `<tr><td colspan="${totalColunas}" class="text-secondary py-3">Nenhum produto cadastrado no estoque.</td></tr>`;
+    }
+
+    // 3. Monta as linhas da tabela
+    estoque.forEach((item, index) => {
+        if(item.quantidade <= 5) baixo++;
+        const totalItem = item.quantidade * (item.preco || 0);
+        valorTotal += totalItem;
+
+        let linha = `
+            <tr>
+                <td class="fw-bold text-start ps-3">${item.produto}</td>
+                <td>${item.categoria}</td>
+                <td>${item.quantidade}</td>
+        `;
+
+        // Se tiver permissão, exibe os valores; caso contrário, omite do HTML
+        if (regras.verValoresEstoque) {
+            linha += `
+                <td>R$ ${(item.preco || 0).toFixed(2)}</td>
+                <td>R$ ${totalItem.toFixed(2)}</td>
+            `;
         }
 
-        estoque.forEach((item, index) => {
-            if(item.quantidade <= 5) baixo++;
-            const totalItem = item.quantidade * item.preco;
-            valorTotal += totalItem;
+        linha += `<td>${getBadgeStatus(item.quantidade)}</td>`;
 
-            tabela.innerHTML += `
-                <tr>
-                    <td class="fw-bold text-start ps-3">${item.produto}</td>
-                    <td>${item.categoria}</td>
-                    <td>${item.quantidade}</td>
-                    <td>R$ ${item.preco.toFixed(2)}</td>
-                    <td>R$ ${totalItem.toFixed(2)}</td>
-                    <td>${getBadgeStatus(item.quantidade)}</td>
-                    <td>
-                        <button class="btn btn-outline-warning btn-sm me-1" onclick="editarProduto(${index})">✏️</button>
-                        <button class="btn btn-outline-danger btn-sm" onclick="deletarProduto(${index})">🗑️</button>
-                    </td>
-                </tr>
+        // Se puder editar, adiciona os botões; se for Cozinheiro, omite
+        if (regras.editarEstoque) {
+            linha += `
+                <td>
+                    <button class="btn btn-outline-warning btn-sm me-1" onclick="editarProduto(${index})">✏️</button>
+                    <button class="btn btn-outline-danger btn-sm" onclick="deletarProduto(${index})">🗑️</button>
+                </td>
             `;
-        });
+        }
 
-        document.getElementById("totalProdutos").innerText = estoque.length;
-        document.getElementById("baixoEstoque").innerText = baixo;
-        document.getElementById("valorTotal").innerText = `R$ ${valorTotal.toFixed(2)}`;
+        linha += `</tr>`;
+        tabela.innerHTML += linha;
+    });
+
+    // 4. Atualiza os cards superiores
+    const elTotal = document.getElementById("totalProdutos");
+    const elBaixo = document.getElementById("baixoEstoque");
+    const elValorTotal = document.getElementById("valorTotal");
+
+    if (elTotal) elTotal.innerText = estoque.length;
+    if (elBaixo) elBaixo.innerText = baixo;
+    if (elValorTotal && regras.verValoresEstoque) {
+        elValorTotal.innerText = `R$ ${valorTotal.toFixed(2)}`;
     }
+}
 
     function deletarProduto(index){
         if(confirm("Remover este item do estoque?")){
