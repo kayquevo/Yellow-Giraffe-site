@@ -36,7 +36,9 @@ O portal administrativo e operacional da empresa fica localizado no arquivo:
 
 
 # Backend & Base de Dados
-daqui a pouco eu documento isso aq :)
+**Diagrama da Base de Dados**
+
+<img src="backend/database/Diagrama.png" width="1000px">
 
 
 # 📋Mudanças
