@@ -1,0 +1,193 @@
+// Yellow Giraffe - diagrama do banco (espelha o yellow_giraffe_schema.sql)
+// Como usar: abra dbdiagram.io, clique em "Go to app" e cole este conteudo
+// no editor da esquerda. Exporte em PNG/PDF pelo menu Export.
+
+Project yellow_giraffe {
+  database_type: 'MySQL'
+}
+
+Enum funcionario_status {
+  Ativo
+  Desativado
+}
+
+Enum escala_tipo {
+  Trabalho
+  Folga
+}
+
+Enum mesa_status {
+  Livre
+  Ocupada
+  Reservada
+}
+
+Enum pedido_tipo {
+  Local
+  Delivery
+  Retirada
+}
+
+Enum pedido_status {
+  Aberto
+  "Em preparo"
+  Pronto
+  Entregue
+  Cancelado
+}
+
+// ---------- EQUIPE E ACESSO ----------
+
+Table cargo [headercolor: #3C6E9F] {
+  id_cargo int [pk, increment]
+  nome_cargo varchar(50) [not null, unique]
+}
+
+Table funcionario [headercolor: #3C6E9F] {
+  id_funcionario int [pk, increment]
+  nome varchar(120) [not null]
+  telefone varchar(20)
+  email varchar(120) [unique]
+  senha_hash varchar(255)
+  id_cargo int [not null]
+  salario decimal(10,2)
+  data_admissao date
+  status funcionario_status [not null, default: 'Ativo']
+}
+
+Table registro_ponto [headercolor: #3C6E9F] {
+  id_registro int [pk, increment]
+  id_funcionario int [not null]
+  data_registro date [not null]
+  hora_entrada time
+  hora_saida time
+}
+
+Table escala_turno [headercolor: #3C6E9F] {
+  id_escala int [pk, increment]
+  id_funcionario int [not null]
+  data_turno date [not null]
+  hora_inicio time
+  hora_fim time
+  tipo escala_tipo [not null, default: 'Trabalho']
+}
+
+Table modulo [headercolor: #7B5EA7] {
+  id_modulo int [pk, increment]
+  nome_modulo varchar(50) [not null, unique]
+}
+
+Table permissao_cargo [headercolor: #7B5EA7] {
+  id_cargo int [not null]
+  id_modulo int [not null]
+  pode_visualizar boolean [not null, default: true]
+  pode_editar boolean [not null, default: false]
+  pode_ver_valores boolean [not null, default: false]
+
+  indexes {
+    (id_cargo, id_modulo) [pk]
+  }
+}
+
+// ---------- ESTOQUE ----------
+
+Table categoria_produto [headercolor: #2E8B6E] {
+  id_categoria_produto int [pk, increment]
+  nome varchar(50) [not null, unique]
+}
+
+Table produto_estoque [headercolor: #2E8B6E] {
+  id_produto int [pk, increment]
+  nome_produto varchar(100) [not null]
+  id_categoria_produto int [not null]
+  quantidade decimal(10,2) [not null, default: 0]
+  unidade_medida varchar(10) [not null, default: 'un']
+  preco_unitario decimal(10,2) [null]
+  estoque_minimo decimal(10,2) [not null, default: 5]
+}
+
+// ---------- CARDAPIO ----------
+
+Table categoria_cardapio [headercolor: #C9822B] {
+  id_categoria_cardapio int [pk, increment]
+  nome varchar(50) [not null, unique]
+}
+
+Table item_cardapio [headercolor: #C9822B] {
+  id_item_cardapio int [pk, increment]
+  nome varchar(100) [not null]
+  descricao varchar(255)
+  preco decimal(10,2) [not null]
+  id_categoria_cardapio int [not null]
+  disponivel boolean [not null, default: true]
+  imagem_url varchar(255)
+}
+
+// ---------- SALAO E PEDIDOS ----------
+
+Table mesa [headercolor: #B5483F] {
+  id_mesa int [pk, increment]
+  numero int [not null, unique]
+  capacidade int [not null, default: 4]
+  status mesa_status [not null, default: 'Livre']
+}
+
+Table pedido [headercolor: #B5483F] {
+  id_pedido int [pk, increment]
+  id_mesa int [note: 'NULL = delivery/retirada']
+  id_funcionario int [not null]
+  tipo pedido_tipo [not null, default: 'Local']
+  status pedido_status [not null, default: 'Aberto']
+  data_hora_abertura datetime [not null, default: `CURRENT_TIMESTAMP`]
+  data_hora_fechamento datetime
+}
+
+Table item_pedido [headercolor: #B5483F] {
+  id_item_pedido int [pk, increment]
+  id_pedido int [not null]
+  id_item_cardapio int [not null]
+  quantidade int [not null, default: 1]
+  preco_unit_no_pedido decimal(10,2) [not null, note: 'preco congelado na hora da venda']
+  observacoes varchar(255)
+}
+
+// ---------- RELACIONAMENTOS (muitos > um) ----------
+
+Ref: funcionario.id_cargo > cargo.id_cargo
+Ref: registro_ponto.id_funcionario > funcionario.id_funcionario
+Ref: escala_turno.id_funcionario > funcionario.id_funcionario
+Ref: permissao_cargo.id_cargo > cargo.id_cargo
+Ref: permissao_cargo.id_modulo > modulo.id_modulo
+Ref: produto_estoque.id_categoria_produto > categoria_produto.id_categoria_produto
+Ref: item_cardapio.id_categoria_cardapio > categoria_cardapio.id_categoria_cardapio
+Ref: pedido.id_mesa > mesa.id_mesa
+Ref: pedido.id_funcionario > funcionario.id_funcionario
+Ref: item_pedido.id_pedido > pedido.id_pedido
+Ref: item_pedido.id_item_cardapio > item_cardapio.id_item_cardapio
+
+// ---------- GRUPOS (cores no diagrama) ----------
+
+TableGroup equipe_e_acesso {
+  cargo
+  funcionario
+  registro_ponto
+  escala_turno
+  modulo
+  permissao_cargo
+}
+
+TableGroup estoque {
+  categoria_produto
+  produto_estoque
+}
+
+TableGroup cardapio {
+  categoria_cardapio
+  item_cardapio
+}
+
+TableGroup salao_e_pedidos {
+  mesa
+  pedido
+  item_pedido
+}
