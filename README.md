@@ -109,7 +109,7 @@ $token = $resp.token
 
 <img src="imgs/back-img/back7.jpeg" width="700px">
 
-**3. Consultando itens no estoque:**
+**3. Consultando itens no estoque(no MySQL):**
 
 ```text
    SELECT * FROM produto_estoque;
