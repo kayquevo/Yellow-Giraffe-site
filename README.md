@@ -39,12 +39,6 @@ O portal administrativo e operacional da empresa fica localizado no arquivo:
 daqui a pouco eu documento isso aq :)
 
 
-## 🛠️ Pré-requisitos
-
-Antes de executar o projeto, certifica-te de que tens as seguintes ferramentas instaladas no teu computador:
-
-
-
 # 📋Mudanças
 
 ### 🧹 Limpeza e Ajustes de Escopo
@@ -103,7 +97,7 @@ Siga o passo a passo abaixo para visualizar o site diretamente no seu computador
 
 ---
 
-### Instruções de Instalação e Execução do BackEnd
+### 🛠️ Instruções de Instalação e Execução do BackEnd
 
 1. **Python (versão 3.10 ou superior)**
 
