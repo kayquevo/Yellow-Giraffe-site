@@ -40,8 +40,84 @@ O portal administrativo e operacional da empresa fica localizado no arquivo:
 
 <img src="backend/database/Diagrama.png" width="1000px">
 
+# Primeiros comandos Back-End
 
-# 📋Mudanças
+**1. Localizando no terminal o locao do arquivo `backend`**
+
+código:
+
+ ```text
+   cd LocalDoArquivo
+   ```
+
+<img src="imgs/back-img/back1.jpeg" width="700px">
+
+**2. Inicializando o servidor do Flask**
+
+```text
+   python app.py
+   ```
+<img src="imgs/back-img/back2.jpeg" width="700px">
+
+**3. Cadastro (Abra um novo terminal, sem fechar o que já está rodando)**
+
+```text
+   cd LocalDoArquivo
+   ```
+
+```text
+   criar_usuario.py
+   ```
+
+Em seguida, será exibida uma tela de cadastro:
+
+<img src="imgs/back-img/back3.jpeg" width="700px">
+
+**4. Os dados serão salvos na base de dados MySQL:**
+
+```text
+   USE yellow_giraffe;
+   SELECT * FROM funcionario;
+   ```
+
+<img src="imgs/back-img/backsql4.jpeg" width="700px">
+
+**5. Login:**
+
+```text
+   $resp = Invoke-RestMethod -Uri "http://localhost:5000/api/login" -Method Post -ContentType "application/json" -Body '{"email":"SEU_EMAIL_AQUI","senha":"SUA_SENHA_AQUI"}'
+$token = $resp.token
+   ```
+
+<img src="imgs/back-img/back5.jpeg" width="1200px">
+
+# Manipulando Dados
+
+**1. Add item no estoque:**
+
+```text
+   Invoke-RestMethod -Uri "http://localhost:5000/api/estoque" -Method Post -Headers @{ Authorization = "Bearer $token" } -ContentType "application/json" -Body '{"nome_produto": "Batata Frita", "id_categoria_produto": 1, "quantidade": 30, "unidade_medida": "kg"}'
+   ```
+
+<img src="imgs/back-img/back6.jpeg" width="700px">
+
+**2. Consultando itens no estoque:**
+
+```text
+   Invoke-RestMethod -Uri "http://localhost:5000/api/estoque" -Method Get -Headers @{ Authorization = "Bearer $token" }
+   ```
+
+<img src="imgs/back-img/back7.jpeg" width="700px">
+
+**3. Consultando itens no estoque:**
+
+```text
+   SELECT * FROM produto_estoque;
+   ```
+
+<img src="imgs/back-img/backsql8.jpeg" width="700px">
+
+# 📋Tarefas
 
 ### 🧹 Limpeza e Ajustes de Escopo
 - [X] Remover temporariamente as abas **RH**, **Mesas** e **Pedidos** (aguardando definição futura).
@@ -64,6 +140,7 @@ O portal administrativo e operacional da empresa fica localizado no arquivo:
 ### 🗄️ Autenticação & Banco de Dados
 - [X] Implementar sistema de login com validação de credenciais e identificação de cargos.
 - [X] Conectar banco de dados centralizado para persistência de logins e dados operacionais (estoque, funcionários, dashboard).
+- [ ] Desenvolver tela de cadastro.
 - [ ] Integrar o back-end com o front-end.
 
 ---
