@@ -170,8 +170,9 @@ Invoke-RestMethod -Uri "http://localhost:5000/api/estoque" -Method Get -Headers 
 ---
 
 ### 🗄️ Autenticação & Banco de Dados
-- [ ] Implementar sistema de login com validação de credenciais e identificação de cargos.
-- [ ] Conectar banco de dados centralizado para persistência de logins e dados operacionais (estoque, funcionários, dashboard).
+- [X] Implementar sistema de login com validação de credenciais e identificação de cargos.
+- [X] Conectar banco de dados centralizado para persistência de logins e dados operacionais (estoque, funcionários, dashboard).
+- [ ] Integrar o back-end com o front-end.
 
 ---
 
