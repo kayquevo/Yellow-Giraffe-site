@@ -224,54 +224,5 @@ Siga o passo a passo abaixo para visualizar o site diretamente no seu computador
     ```
     *Este comando baixa pacotes como o Flask, o conector do MySQL e os módulos de criptografia de senhas e autenticação.*
 
-**Usuário**
-
-12. No mesmo terminal dentro da pasta `backend`, execute o script de registo:
-    ```bash
-    python criar_usuario.py
-    ```
-13. O terminal irá solicitar os seguintes dados para guardar na base de dados:
-    * **Nome:** (ex.: `Kayque`)
-    * **E-mail:** (ex.: `kayque5925@gmail.com`)
-    * **Senha:** (defina uma palavra-passe segura; ela será encriptada automaticamente)
-    * **Cargo:** `Gerente` *(utilize exatamente este nome para obter acesso total)*
-14. Prima **Enter** para concluir o registo até surgir a confirmação no terminal.
-
-**Servidor**
-
-15. No terminal aberto na pasta `backend`, execute o ficheiro principal da API:
-    ```bash
-    python app.py
-    ```
-16. O servidor ficará ativo e acessível localmente em `http://localhost:5000` (ou `http://127.0.0.1:5000`).
-17. **Importante:** Mantenha esta janela do terminal aberta; se fechá-la ou interromper com `Ctrl + C`, a API deixará de responder às requisições.
-
-**Testes via PowerShell**
-
-Abra uma segunda janela ou aba do terminal (PowerShell) para enviar os pedidos à API enquanto o `app.py` continua em execução.
-
-18. Fazer o Login e Guardar o Token Automaticamente:
-    Execute o comando abaixo com o e-mail e a palavra-passe criados anteriormente. O PowerShell guardará o token JWT completo diretamente na variável `$token`:
-    ```powershell
-    $resp = Invoke-RestMethod -Uri "http://localhost:5000/api/login" -Method Post -ContentType "application/json" -Body '{"email":"kayque5925@gmail.com","senha":"kayque59253"}'
-    $token = $resp.token
-    ```
-
-19. Inserir um Produto no Stock (POST):
-    Envie o produto com o token de autenticação no cabeçalho:
-    ```powershell
-    Invoke-RestMethod -Uri "http://localhost:5000/api/estoque" -Method Post -Headers @{ Authorization = "Bearer $token" } -ContentType "application/json" -Body '{"nome_produto": "Pao sirio", "id_categoria_produto": 1, "quantidade": 20, "unidade_medida": "un"}'
-    ```
-    * **Resposta esperada:** A API devolverá a confirmação com o identificador criado, como `{"id_produto": 1}`.
-
-20. Consultar os Itens no Stock (GET):
-    Para listar os produtos gravados na base de dados:
-    ```powershell
-    Invoke-RestMethod -Uri "http://localhost:5000/api/estoque" -Method Get -Headers @{ Authorization = "Bearer $token" }
-    ```
-    * **Resposta esperada:** Uma lista em JSON com os detalhes do produto (nome, categoria associada, quantidade e stock mínimo).
-
-
-
 
 
