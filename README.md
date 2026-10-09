@@ -140,7 +140,7 @@ $token = $resp.token
 ### 🗄️ Autenticação & Banco de Dados
 - [X] Implementar sistema de login com validação de credenciais e identificação de cargos.
 - [X] Conectar banco de dados centralizado para persistência de logins e dados operacionais (estoque, funcionários, dashboard).
-- [ ] Desenvolver tela de cadastro.
+- [X] Desenvolver tela de cadastro.
 - [ ] Integrar o back-end com o front-end.
 
 ---
