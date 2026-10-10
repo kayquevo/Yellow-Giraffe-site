@@ -66,7 +66,7 @@ código:
    ```
 
 ```text
-   criar_usuario.py
+   python criar_usuario.py
    ```
 
 Em seguida, será exibida uma tela de cadastro:
@@ -85,8 +85,7 @@ Em seguida, será exibida uma tela de cadastro:
 **5. Login:**
 
 ```text
-   $resp = Invoke-RestMethod -Uri "http://localhost:5000/api/login" -Method Post -ContentType "application/json" -Body '{"email":"SEU_EMAIL_AQUI","senha":"SUA_SENHA_AQUI"}'
-$token = $resp.token
+   $resp = Invoke-RestMethod -Uri "http://localhost:5000/api/login" -Method Post -ContentType "application/json" -Body '{"email":"Seu email","senha":"Sua senha"}' ; $token = $resp.token
    ```
 
 <img src="imgs/back-img/back5.jpeg" width="1200px">
