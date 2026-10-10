@@ -116,6 +116,14 @@ Em seguida, será exibida uma tela de cadastro:
 
 <img src="imgs/back-img/backsql8.jpeg" width="700px">
 
+## O que falta pra isso virar o site de verdade
+
+Isto é só a API. HTML ainda lê e grava direto no
+`localStorage` — o próximo passo é trocar essas partes do JavaScript por
+chamadas `fetch()` pros endereços acima, guardar o token (por exemplo em
+`sessionStorage`, só ele, nunca a senha) depois do login, e esconder
+no próprio HTML as abas que a permissão não libera. 
+
 # 📋Tarefas
 
 ### 🧹 Limpeza e Ajustes de Escopo
