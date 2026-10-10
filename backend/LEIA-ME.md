@@ -1,11 +1,8 @@
 # Backend Yellow Giraffe (Flask + MySQL)
 
 Implementa, como API, as funções que hoje vivem só no `localStorage` do
-`vini.html`: login, estoque (listar/criar/editar) e funcionários (listar),
-além do registro de ponto. A lógica de permissões foi testada num banco
-de teste separado antes desta versão (login, ocultar preço/salário para
-quem não tem `pode_ver_valores`, e bloquear quem não tem a permissão do
-módulo) — aqui ela está ligada ao seu MySQL de verdade.
+html: login, estoque (listar/criar/editar) e funcionários (listar),
+além do registro de ponto. 
 
 ## 1. Instalar as dependências
 
@@ -14,11 +11,12 @@ cd backend
 pip install -r requirements.txt
 ```
 
-## 2. Configurar a conexão com o seu MySQL
+## 2. Configurar a conexão com o MySQL
 
-Abra `config.py` e troque `COLOQUE_SUA_SENHA_AQUI` pela senha do seu
-usuário do MySQL (o `root`, provavelmente). Se o banco `yellow_giraffe`
-tiver outro nome, usuário ou porta, ajuste as outras linhas também.
+```
+DB_PASSWORD="senha"
+python app.py
+```
 
 ## 3. Criar um funcionário para conseguir logar
 
@@ -43,7 +41,7 @@ Ele sobe em `http://localhost:5000`.
 
 ## 5. Testar
 
-Com `curl` (ou importe no Postman/Insomnia se preferir interface):
+Com `curl`:
 
 ```bash
 # login — guarda o token que vier na resposta
@@ -72,19 +70,8 @@ deve devolver `403`.
 
 ## O que falta pra isso virar o site de verdade
 
-Isto é só a API. O `vini.html` ainda lê e grava direto no
+Isto é só a API. HTML ainda lê e grava direto no
 `localStorage` — o próximo passo é trocar essas partes do JavaScript por
 chamadas `fetch()` pros endereços acima, guardar o token (por exemplo em
 `sessionStorage`, só ele, nunca a senha) depois do login, e esconder
-no próprio HTML as abas que a permissão não libera. Se quiser, posso
-ajudar com essa parte também.
-
-## Limitação
-
-Eu escrevi e testei a lógica (login, decorador de permissão, estoque,
-ponto) contra um banco SQLite equivalente dentro do meu ambiente, porque
-não tenho como alcançar o MySQL que está no seu computador. Essa versão
-usa a mesma lógica já validada, mas trocada para PyMySQL — ainda assim,
-é a primeira vez que ela roda contra o seu banco de verdade, então é
-bem possível que apareça algum erro de ambiente (senha, nome do banco,
-versão do MySQL). Me manda a mensagem de erro que a gente resolve.
+no próprio HTML as abas que a permissão não libera. 

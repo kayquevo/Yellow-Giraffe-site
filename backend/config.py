@@ -6,7 +6,7 @@ import os
 DB_HOST = os.environ.get("DB_HOST", "localhost")
 DB_PORT = int(os.environ.get("DB_PORT", "3306"))
 DB_USER = os.environ.get("DB_USER", "root")
-DB_PASSWORD = os.environ.get("DB_PASSWORD", "")
+DB_PASSWORD = os.environ.get("DB_PASSWORD", "Kayque59253@")
 DB_NAME = os.environ.get("DB_NAME", "yellow_giraffe")
 
 # Chave usada para assinar o token de login (JWT). Troque por qualquer
