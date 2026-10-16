@@ -231,5 +231,10 @@ Siga o passo a passo abaixo para visualizar o site diretamente no seu computador
     ```
     *Este comando baixa pacotes como o Flask, o conector do MySQL e os módulos de criptografia de senhas e autenticação.*
 
+    Instale também o suporte a CORS para permitir a comunicação com o front-end:
+    ```bash
+    pip install flask-cors
+    ```
+
 
 
