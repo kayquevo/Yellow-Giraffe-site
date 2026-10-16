@@ -148,7 +148,10 @@ no próprio HTML as abas que a permissão não libera.
 - [X] Implementar sistema de login com validação de credenciais e identificação de cargos.
 - [X] Conectar banco de dados centralizado para persistência de logins e dados operacionais (estoque, funcionários, dashboard).
 - [X] Desenvolver tela de cadastro.
-- [ ] Integrar o back-end com o front-end.
+- [X] Autenticação de login.
+- [ ] Realizar cadastro.
+- [ ] Persistência de dados para estoque.
+- [ ] Persistência de dados para funcionários.
 
 ---
 
