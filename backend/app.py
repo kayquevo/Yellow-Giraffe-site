@@ -4,11 +4,14 @@ import functools
 import jwt
 from flask import Flask, g, request, jsonify
 from werkzeug.security import check_password_hash
+from flask_cors import CORS
+
 
 import config
 import db
 
 app = Flask(__name__)
+CORS(app)
 app.teardown_appcontext(db.close_db)
 
 
