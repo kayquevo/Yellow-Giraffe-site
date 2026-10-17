@@ -149,7 +149,8 @@ no próprio HTML as abas que a permissão não libera.
 - [X] Conectar banco de dados centralizado para persistência de logins e dados operacionais (estoque, funcionários, dashboard).
 - [X] Desenvolver tela de cadastro.
 - [X] Autenticação de login.
-- [ ] Realizar cadastro.
+- [X] Realizar cadastro.
+- [ ] Bloquear o cargo definido ao logar no Dashboard.
 - [ ] Persistência de dados para estoque.
 - [ ] Persistência de dados para funcionários.
 
