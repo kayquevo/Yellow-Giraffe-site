@@ -1,3 +1,12 @@
+const btnSair = document.getElementById('btnSair');
+if (btnSair) {
+  btnSair.addEventListener('click', () => {
+    // Remove o token da sessão
+    sessionStorage.removeItem('token');
+    // Redireciona pro login
+    window.location.href = 'login.html';
+  });
+}
 
 /* =====================================================
    CONTROLE DE ACESSO POR CARGO (RBAC)
@@ -425,6 +434,8 @@ function renderizarEstoque(){
                 </tr>
             `;
         });
+
+        
     }
 
     /* INICIALIZAÇÃO */

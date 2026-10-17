@@ -17,6 +17,13 @@
     <link rel="icon" type="image/x-icon" href="yellowgiraffelogo.jpg">
 </head>
 
+<script>
+  const token = sessionStorage.getItem('token');
+  if (!token) {
+    window.location.replace('login.html');
+  }
+</script>
+
 <body>
 
     <!-- NAVBAR -->
@@ -30,6 +37,7 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto align-items-center gap-2">
                     <li class="nav-item">
@@ -42,6 +50,8 @@
                         <a class="nav-link" href="principaisOp.html">ESPECIALIDADES DA CASA</a>
                     </li>
                 </ul>
+
+                <button id="btnSair" class="btn btn-outline-warning btn-sm ms-2">Sair</button>
             </div>
         </div>
     </nav>

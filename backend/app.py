@@ -5,6 +5,7 @@ import jwt
 from flask import Flask, g, request, jsonify
 from werkzeug.security import check_password_hash
 from flask_cors import CORS
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 import config
@@ -146,6 +147,35 @@ def listar_funcionarios():
         for f in funcs:
             f.pop("salario", None)
     return jsonify(funcs)
+
+@app.post("/api/cadastro")
+def cadastrar_funcionario():
+    dados = request.get_json(force=True)
+    
+    nome = dados.get("nome")
+    email = dados.get("email")
+    senha = dados.get("senha")
+    nome_cargo = dados.get("cargo")
+
+    if not nome or not email or not senha or not nome_cargo:
+        return jsonify({"erro": "Todos os campos são obrigatórios"}), 400
+
+    cargo = db.query_one("SELECT id_cargo FROM cargo WHERE nome_cargo = %s", (nome_cargo,))
+    if cargo is None:
+        return jsonify({"erro": f"Cargo '{nome_cargo}' não encontrado"}), 400
+
+    existente = db.query_one("SELECT id_funcionario FROM funcionario WHERE email = %s", (email,))
+    if existente:
+        return jsonify({"erro": "Este e-mail já está em uso"}), 409
+
+    hash_senha = generate_password_hash(senha)
+
+    novo_id = db.execute(
+        "INSERT INTO funcionario (nome, email, senha_hash, id_cargo, status) VALUES (%s, %s, %s, %s, 'Ativo')",
+        (nome, email, hash_senha, cargo["id_cargo"]),
+    )
+
+    return jsonify({"status": "sucesso", "id_funcionario": novo_id}), 201
 
 
 # ---------------------------------------------------------------------
