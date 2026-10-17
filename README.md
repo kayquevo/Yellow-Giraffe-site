@@ -154,6 +154,8 @@ no próprio HTML as abas que a permissão não libera.
 - [ ] Persistência de dados para estoque.
 - [ ] Persistência de dados para funcionários.
 
+- [ ] ACESSAR O BANCO DE DADOS REMOTAMENTE (mais complicadinho isso ae eu acho)
+
 ---
 
 ### 💡 Ideia Futura: Escala & Turnos da Equipe
