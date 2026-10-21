@@ -11,7 +11,7 @@ if (btnSair) {
 /* =====================================================
    CONTROLE DE ACESSO POR CARGO (RBAC)
 ===================================================== */
-let cargoAtual = localStorage.getItem("yg_cargo_ativo") || "Gerente";
+let cargoAtual = sessionStorage.getItem("cargo") || "Cozinheiro";
 
 const regrasAcesso = {
     "Gerente": {
@@ -28,6 +28,11 @@ const regrasAcesso = {
         abasPermitidas: ["dashboard", "estoque", "controle"],
         verValoresEstoque: false,
         editarEstoque: false
+    },
+    "Garçom": {
+        abasPermitidas: ["dashboard", "controle"],
+        verValoresEstoque: false,
+        editarEstoque: false
     }
 };
 
@@ -38,11 +43,14 @@ function trocarCargo(novoCargo) {
 }
 
 function aplicarPermissoes() {
-    const regras = regrasAcesso[cargoAtual];
+    const regras = regrasAcesso[cargoAtual] || regrasAcesso["Cozinheiro"];
 
-    // Sincroniza o select do topo se existir
+    // Atualiza a visualização do cargo
     const selectCargo = document.getElementById("cargoAtivo");
-    if (selectCargo) selectCargo.value = cargoAtual;
+    if (selectCargo) {
+        selectCargo.value = cargoAtual;
+        selectCargo.disabled = true; // Desabilita o select para o usuário não burlar o próprio cargo
+    }
 
     // 1. Controle das Abas do Menu
     document.querySelectorAll(".portal-tab-btn").forEach(btn => {
@@ -59,13 +67,13 @@ function aplicarPermissoes() {
         }
     });
 
-    // 3. Controle do Formulário de Cadastro do Estoque (Cozinheiro não cadastra)
+    // 3. Controle do Formulário de Cadastro do Estoque
     const formEstoque = document.querySelector("#estoque .form-custom");
     if (formEstoque) {
         formEstoque.style.display = regras.editarEstoque ? "" : "none";
     }
 
-    // 4. Controle do campo "Preço Unitário" no cadastro (Copeiro não cadastra preço)
+    // 4. Controle do campo Preço Unitário no cadastro
     const inputPreco = document.getElementById("preco");
     if (inputPreco) {
         const colunaPreco = inputPreco.closest(".col-md-3");
@@ -74,7 +82,7 @@ function aplicarPermissoes() {
         }
     }
 
-    // 5. Card de "Valor Estimado" no topo do Estoque (oculta para Copeiro e Cozinheiro)
+    // 5. Card de Valor Estimado no topo do Estoque
     const cardValorEstimado = document.getElementById("valorTotal");
     if (cardValorEstimado) {
         const colunaValor = cardValorEstimado.closest(".col-md-4");
@@ -83,15 +91,15 @@ function aplicarPermissoes() {
         }
     }
 
-    // Se estiver em uma tela proibida (ex: Funcionários sendo Copeiro), volta para o dashboard
+    // Se estiver em uma tela proibida para o cargo, redireciona para a tela inicial
     const telaAtiva = document.querySelector(".portal-tela.ativa");
     if (telaAtiva && !regras.abasPermitidas.includes(telaAtiva.id)) {
         selecionarAba("dashboard");
     }
 
-    // Re-renderiza a tabela de estoque aplicando as colunas visíveis
     renderizarEstoque();
 }
+
     /* NAVEGAÇÃO ENTRE TELAS */
     function mostrarTela(id, elementoBtn){
         document.querySelectorAll(".portal-tela").forEach(t => t.classList.remove("ativa"));
@@ -439,6 +447,7 @@ function renderizarEstoque(){
     }
 
     /* INICIALIZAÇÃO */
+    aplicarPermissoes();
     renderizarPonto();
     renderizarEstoque();
     renderizarFuncionarios();

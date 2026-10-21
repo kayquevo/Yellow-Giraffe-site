@@ -30,6 +30,8 @@ formLogin.addEventListener('submit', async (event) => {
 
     // Salva apenas o token no sessionStorage
     sessionStorage.setItem('token', dados.token);
+    sessionStorage.setItem('cargo', dados.cargo);
+    sessionStorage.setItem('nomeUsuario', dados.nome);
 
     msgDiv.className = 'small mb-2 text-success';
     msgDiv.textContent = 'Login realizado! Redirecionando...';

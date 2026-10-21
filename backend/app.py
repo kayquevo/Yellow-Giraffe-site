@@ -70,12 +70,20 @@ def requer_permissao(nome_modulo, acao="pode_visualizar"):
 def login():
     dados = request.get_json(force=True)
     func = db.query_one(
-        "SELECT * FROM funcionario WHERE email = %s AND status = 'Ativo'",
+        """SELECT f.*, c.nome_cargo 
+           FROM funcionario f 
+           JOIN cargo c ON c.id_cargo = f.id_cargo 
+           WHERE f.email = %s AND f.status = 'Ativo'""",
         (dados.get("email"),),
     )
     if func is None or not func["senha_hash"] or not check_password_hash(func["senha_hash"], dados.get("senha", "")):
         return jsonify({"erro": "email ou senha inválidos"}), 401
-    return jsonify({"token": gerar_token(func)})
+    
+    return jsonify({
+        "token": gerar_token(func),
+        "cargo": func["nome_cargo"],
+        "nome": func["nome"]
+    })
 
 
 # ---------------------------------------------------------------------
