@@ -138,6 +138,15 @@ def atualizar_produto(id_produto):
     )
     return jsonify({"status": "atualizado"})
 
+@app.delete("/api/estoque/<int:id_produto>")
+@requer_permissao("Estoque", "pode_editar")
+def deletar_produto(id_produto):
+    db.execute(
+        "DELETE FROM produto_estoque WHERE id_produto = %s",
+        (id_produto,)
+    )
+    return jsonify({"status": "removido"}), 200
+
 
 # ---------------------------------------------------------------------
 # funcionários
@@ -155,6 +164,74 @@ def listar_funcionarios():
         for f in funcs:
             f.pop("salario", None)
     return jsonify(funcs)
+
+# --- CRUD de Funcionários pelo Painel ---
+
+@app.post("/api/funcionarios")
+@requer_permissao("Funcionarios", "pode_editar")
+def criar_funcionario_painel():
+    dados = request.get_json(force=True)
+    nome = dados.get("nome")
+    nome_cargo = dados.get("cargo")
+    telefone = dados.get("telefone")
+    salario = dados.get("salario")
+    status = dados.get("status", "Ativo")
+
+    if not nome or not nome_cargo:
+        return jsonify({"erro": "Nome e cargo são obrigatórios"}), 400
+
+    cargo = db.query_one("SELECT id_cargo FROM cargo WHERE nome_cargo = %s", (nome_cargo,))
+    if cargo is None:
+        return jsonify({"erro": f"Cargo '{nome_cargo}' não encontrado"}), 400
+
+    # Gera um email único temporário caso não seja informado
+    timestamp_atual = datetime.datetime.now().strftime("%M%S")
+    email_padrao = dados.get("email") or f"{nome.lower().replace(' ', '.')}.{timestamp_atual}@giraffa.local"
+    
+    # Define uma senha padrão em hash caso o usuário venha a logar (senha: 12345678)
+    senha_hash = generate_password_hash("12345678")
+
+    novo_id = db.execute(
+        """INSERT INTO funcionario 
+           (nome, email, senha_hash, id_cargo, telefone, salario, status, data_admissao) 
+           VALUES (%s, %s, %s, %s, %s, %s, %s, CURDATE())""",
+        (nome, email_padrao, senha_hash, cargo["id_cargo"], telefone, salario, status),
+    )
+    return jsonify({"id_funcionario": novo_id, "status": "criado"}), 201
+
+
+@app.put("/api/funcionarios/<int:id_funcionario>")
+@requer_permissao("Funcionarios", "pode_editar")
+def atualizar_funcionario_painel(id_funcionario):
+    dados = request.get_json(force=True)
+    nome = dados.get("nome")
+    nome_cargo = dados.get("cargo")
+    telefone = dados.get("telefone")
+    salario = dados.get("salario")
+    status = dados.get("status", "Ativo")
+
+    cargo = db.query_one("SELECT id_cargo FROM cargo WHERE nome_cargo = %s", (nome_cargo,))
+    if cargo is None:
+        return jsonify({"erro": "Cargo inválido"}), 400
+
+    db.execute(
+        """UPDATE funcionario 
+           SET nome=%s, id_cargo=%s, telefone=%s, salario=%s, status=%s 
+           WHERE id_funcionario=%s""",
+        (nome, cargo["id_cargo"], telefone, salario, status, id_funcionario),
+    )
+    return jsonify({"status": "atualizado"}), 200
+
+
+@app.delete("/api/funcionarios/<int:id_funcionario>")
+@requer_permissao("Funcionarios", "pode_editar")
+def excluir_funcionario_painel(id_funcionario):
+    try:
+        db.execute("DELETE FROM funcionario WHERE id_funcionario = %s", (id_funcionario,))
+    except Exception:
+        # Se houver histórico vinculado (como registro de ponto), apenas desativa
+        db.execute("UPDATE funcionario SET status = 'Desativado' WHERE id_funcionario = %s", (id_funcionario,))
+    return jsonify({"status": "removido"}), 200
 
 @app.post("/api/cadastro")
 def cadastrar_funcionario():

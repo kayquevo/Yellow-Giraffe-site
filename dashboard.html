@@ -158,13 +158,14 @@
                     <div class="col-md-3">
                         <select id="categoria" class="form-select">
                             <option value="">Categoria</option>
-                            <option>Pães & Massas</option>
-                            <option>Carnes & Queijos</option>
-                            <option>Bebidas</option>
-                            <option>Hortifruti</option>
-                            <option>Embalagens</option>
-                            <option>Outros</option>
+                            <option value="1">Pães & Massas</option>
+                            <option value="2">Carnes & Queijos</option>
+                            <option value="3">Bebidas</option>
+                            <option value="4">Hortifruti</option>
+                            <option value="5">Embalagens</option>
+                            <option value="6">Outros</option>
                         </select>
+
                     </div>
                     <div class="col-12 mt-3">
                         <button class="btn btn-yellow w-100 py-2" onclick="adicionarProduto()">➕ CADASTRAR PRODUTO NO ESTOQUE</button>
@@ -240,16 +241,22 @@
             <div class="form-custom mb-4">
                 <div class="row g-2">
                     <div class="col-md-4">
-                        <input type="text" id="nomeFuncionario" class="form-control" placeholder="Nome">
+                        <input type="text" id="nomeFuncionario" class="form-control" placeholder="Nome completo" required>
                     </div>
                     <div class="col-md-3">
-                        <input type="text" id="cargo" class="form-control" placeholder="Cargo">
+                        <select id="cargoFuncionario" class="form-select" required>
+                            <option value="">Selecione o Cargo</option>
+                            <option value="Gerente">Gerente</option>
+                            <option value="Copeiro">Copeiro</option>
+                            <option value="Cozinheiro">Cozinheiro</option>
+                            <option value="Garçom">Garçom</option>
+                        </select>
                     </div>
                     <div class="col-md-3">
-                        <input type="text" id="telefone" class="form-control" placeholder="Telefone">
+                        <input type="text" id="telefone" class="form-control" placeholder="Telefone / Telemóvel">
                     </div>
                     <div class="col-md-2">
-                        <input type="number" id="salario" class="form-control" placeholder="Salário (R$)">
+                        <input type="number" id="salario" class="form-control" step="0.01" placeholder="Salário (R$)">
                     </div>
                     <div class="col-md-4 mt-2">
                         <select id="status" class="form-select">
@@ -258,7 +265,7 @@
                         </select>
                     </div>
                     <div class="col-md-8 mt-2">
-                        <button class="btn btn-yellow w-100 py-2" onclick="cadastrarFuncionario()">CADASTRAR FUNCIONÁRIO</button>
+                        <button class="btn btn-yellow w-100 py-2" onclick="cadastrarFuncionarioPainel()">➕ CADASTRAR FUNCIONÁRIO</button>
                     </div>
                 </div>
             </div>

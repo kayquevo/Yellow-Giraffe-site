@@ -97,21 +97,30 @@ function aplicarPermissoes() {
         selecionarAba("dashboard");
     }
 
-    renderizarEstoque();
+    carregarEstoque();
 }
 
     /* NAVEGAÇÃO ENTRE TELAS */
-    function mostrarTela(id, elementoBtn){
-        document.querySelectorAll(".portal-tela").forEach(t => t.classList.remove("ativa"));
-        document.querySelectorAll(".portal-tab-btn").forEach(b => b.classList.remove("active"));
+function mostrarTela(id, elementoBtn){
+    document.querySelectorAll(".portal-tela").forEach(t => t.classList.remove("ativa"));
+    document.querySelectorAll(".portal-tab-btn").forEach(b => b.classList.remove("active"));
 
-        const tela = document.getElementById(id);
-        if(tela) tela.classList.add("ativa");
+    const tela = document.getElementById(id);
+    if(tela) tela.classList.add("ativa");
 
-        if(elementoBtn){
-            elementoBtn.classList.add("active");
-        }
+    if(elementoBtn){
+        elementoBtn.classList.add("active");
     }
+
+    // Se navegou para a tela de estoque, busca os dados da API na hora
+    if (id === 'estoque') {
+        carregarEstoque();
+    }
+
+    if (id === 'funcionarios') {
+        carregarFuncionarios();
+    }
+}
 
     function selecionarAba(id){
         const botoes = document.querySelectorAll(".portal-tab-btn");
@@ -221,61 +230,53 @@ function aplicarPermissoes() {
     }
 
     /* =====================================================
-       CONTROLE DE ESTOQUE
+    CONTROLE DE ESTOQUE (INTEGRADO COM A API MYSQL)
     ===================================================== */
-    let estoque = JSON.parse(localStorage.getItem("yg_estoque")) || [];
+const API_URL = 'http://localhost:5000/api';
 
-    function adicionarProduto(){
-        const produto = document.getElementById("produto").value.trim();
-        const quantidade = document.getElementById("quantidade").value;
-        const preco = document.getElementById("preco").value;
-        const categoria = document.getElementById("categoria").value;
-
-        if(!produto || !quantidade || !categoria){
-            alert("Preencha todos os campos do produto!");
-            return;
-        }
-
-        estoque.push({
-            produto,
-            quantidade: Number(quantidade),
-            preco: Number(preco),
-            categoria
-        });
-
-        localStorage.setItem("yg_estoque", JSON.stringify(estoque));
-        limparCamposEstoque();
-        renderizarEstoque();
-    }
-
-    function limparCamposEstoque(){
-        document.getElementById("produto").value = "";
-        document.getElementById("quantidade").value = "";
-        document.getElementById("preco").value = "";
-        document.getElementById("categoria").value = "";
-    }
-
-    function getBadgeStatus(qtd){
-        if(qtd <= 5) return `<span class="badge-baixo">CRÍTICO</span>`;
-        if(qtd <= 15) return `<span class="badge-medio">ATENÇÃO</span>`;
-        return `<span class="badge-alto">OK</span>`;
-    }
-
-function renderizarEstoque(){
-    const regras = regrasAcesso[cargoAtual];
+// 1. LISTAR PRODUTOS (GET)
+async function carregarEstoque() {
+    const token = sessionStorage.getItem('token');
     const tabela = document.getElementById("tabelaProdutos");
     const thead = document.querySelector("#estoque thead tr");
     if (!tabela || !thead) return;
 
+    try {
+        const resposta = await fetch(`${API_URL}/estoque`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (resposta.status === 401 || resposta.status === 403) {
+            tabela.innerHTML = `<tr><td colspan="6" class="text-danger py-3">Acesso não autorizado para o seu cargo.</td></tr>`;
+            return;
+        }
+
+        const produtos = await resposta.json();
+        renderizarTabelaEstoque(produtos);
+
+    } catch (erro) {
+        console.error("Erro ao carregar estoque:", erro);
+        tabela.innerHTML = `<tr><td colspan="6" class="text-danger py-3">Erro ao conectar com o servidor.</td></tr>`;
+    }
+}
+
+// 2. RENDERIZAR TABELA E CARDS
+function renderizarTabelaEstoque(produtos) {
+    const regras = regrasAcesso[cargoAtual] || regrasAcesso["Cozinheiro"];
+    const tabela = document.getElementById("tabelaProdutos");
+    const thead = document.querySelector("#estoque thead tr");
+
     tabela.innerHTML = "";
 
-    // 1. Monta o cabeçalho dinamicamente de acordo com as permissões do cargo
+    // Cabeçalho adaptado ao cargo
     let cabecalhoHtml = `
         <th>Produto</th>
         <th>Categoria</th>
         <th>Qtd</th>
     `;
-    // Apenas Gerente vê as colunas de preços
     if (regras.verValoresEstoque) {
         cabecalhoHtml += `
             <th>Preço Unit.</th>
@@ -283,50 +284,50 @@ function renderizarEstoque(){
         `;
     }
     cabecalhoHtml += `<th>Status</th>`;
-    // Apenas quem pode editar (Gerente e Copeiro) vê a coluna de ações
     if (regras.editarEstoque) {
         cabecalhoHtml += `<th>Ações</th>`;
     }
     thead.innerHTML = cabecalhoHtml;
 
-    // 2. Calcula os totais e define o total de colunas para mensagens vazias
     let baixo = 0;
     let valorTotal = 0;
     const totalColunas = 3 + (regras.verValoresEstoque ? 2 : 0) + (regras.editarEstoque ? 1 : 0);
 
-    if(estoque.length === 0){
+    if (!produtos || produtos.length === 0) {
         tabela.innerHTML = `<tr><td colspan="${totalColunas}" class="text-secondary py-3">Nenhum produto cadastrado no estoque.</td></tr>`;
+        atualizarCardsEstoque(0, 0, 0, regras.verValoresEstoque);
+        return;
     }
 
-    // 3. Monta as linhas da tabela
-    estoque.forEach((item, index) => {
-        if(item.quantidade <= 5) baixo++;
-        const totalItem = item.quantidade * (item.preco || 0);
-        valorTotal += totalItem;
+    produtos.forEach((item) => {
+        const qtd = Number(item.quantidade) || 0;
+        const preco = item.preco_unitario !== undefined ? Number(item.preco_unitario) : 0;
+        const subtotal = qtd * preco;
+
+        if (qtd <= (item.estoque_minimo || 5)) baixo++;
+        valorTotal += subtotal;
 
         let linha = `
             <tr>
-                <td class="fw-bold text-start ps-3">${item.produto}</td>
-                <td>${item.categoria}</td>
-                <td>${item.quantidade}</td>
+                <td class="fw-bold text-start ps-3">${item.nome_produto}</td>
+                <td>${item.categoria || '-'}</td>
+                <td>${qtd} ${item.unidade_medida || 'un'}</td>
         `;
 
-        // Se tiver permissão, exibe os valores; caso contrário, omite do HTML
         if (regras.verValoresEstoque) {
             linha += `
-                <td>R$ ${(item.preco || 0).toFixed(2)}</td>
-                <td>R$ ${totalItem.toFixed(2)}</td>
+                <td>R$ ${preco.toFixed(2)}</td>
+                <td>R$ ${subtotal.toFixed(2)}</td>
             `;
         }
 
-        linha += `<td>${getBadgeStatus(item.quantidade)}</td>`;
+        linha += `<td>${getBadgeStatus(qtd)}</td>`;
 
-        // Se puder editar, adiciona os botões; se for Cozinheiro, omite
         if (regras.editarEstoque) {
             linha += `
                 <td>
-                    <button class="btn btn-outline-warning btn-sm me-1" onclick="editarProduto(${index})">✏️</button>
-                    <button class="btn btn-outline-danger btn-sm" onclick="deletarProduto(${index})">🗑️</button>
+                    <button class="btn btn-outline-warning btn-sm me-1" onclick="editarProduto(${item.id_produto}, '${item.nome_produto}', ${qtd}, ${preco})">✏️</button>
+                    <button class="btn btn-outline-danger btn-sm" onclick="deletarProduto(${item.id_produto})">🗑️</button>
                 </td>
             `;
         }
@@ -335,119 +336,343 @@ function renderizarEstoque(){
         tabela.innerHTML += linha;
     });
 
-    // 4. Atualiza os cards superiores
+    atualizarCardsEstoque(produtos.length, baixo, valorTotal, regras.verValoresEstoque);
+}
+
+function atualizarCardsEstoque(total, baixo, valorTotal, podeVerValores) {
     const elTotal = document.getElementById("totalProdutos");
     const elBaixo = document.getElementById("baixoEstoque");
     const elValorTotal = document.getElementById("valorTotal");
 
-    if (elTotal) elTotal.innerText = estoque.length;
+    if (elTotal) elTotal.innerText = total;
     if (elBaixo) elBaixo.innerText = baixo;
-    if (elValorTotal && regras.verValoresEstoque) {
+    if (elValorTotal && podeVerValores) {
         elValorTotal.innerText = `R$ ${valorTotal.toFixed(2)}`;
     }
 }
 
-    function deletarProduto(index){
-        if(confirm("Remover este item do estoque?")){
-            estoque.splice(index, 1);
-            localStorage.setItem("yg_estoque", JSON.stringify(estoque));
-            renderizarEstoque();
-        }
+// 3. ADICIONAR PRODUTO (POST)
+async function adicionarProduto() {
+    const token = sessionStorage.getItem('token');
+    const nome_produto = document.getElementById("produto").value.trim();
+    const quantidade = document.getElementById("quantidade").value;
+    const preco = document.getElementById("preco").value;
+    const categoriaSelect = document.getElementById("categoria");
+    const id_categoria_produto = categoriaSelect ? categoriaSelect.value : "";
+
+    // Validação inicial no front-end
+    if (!nome_produto || !quantidade || !id_categoria_produto) {
+        alert("Preencha o nome, quantidade e selecione uma categoria válida!");
+        return;
     }
 
-    function editarProduto(index){
-        const item = estoque[index];
-        const novoNome = prompt("Nome do produto:", item.produto);
-        const novaQtd = prompt("Quantidade em estoque:", item.quantidade);
-        const novoPreco = prompt("Preço unitário (R$) - Opcional:", item.preco || 0);
-        if(novoNome !== null && novaQtd !== null && novoPreco !== null){
-            estoque[index].produto = novoNome;
-            estoque[index].quantidade = Number(novaQtd);
-            estoque[index].preco = novoPreco ? Number(novoPreco) : 0;
-            localStorage.setItem("yg_estoque", JSON.stringify(estoque));
-            renderizarEstoque();
+    try {
+        const resposta = await fetch(`${API_URL}/estoque`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                nome_produto: nome_produto,
+                id_categoria_produto: parseInt(id_categoria_produto, 10),
+                quantidade: parseInt(quantidade, 10),
+                preco_unitario: preco ? parseFloat(preco) : 0.0,
+                unidade_medida: "un",
+                estoque_minimo: 5
+            })
+        });
+
+        if (!resposta.ok) {
+            const erro = await resposta.json();
+            alert(erro.erro || "Falha ao cadastrar produto no estoque.");
+            return;
         }
+
+        limparCamposEstoque();
+        carregarEstoque();
+
+    } catch (erro) {
+        console.error("Erro ao adicionar produto:", erro);
+        alert("Erro de conexão ao cadastrar produto.");
     }
+}
+
+// 4. ATUALIZAR PRODUTO (PUT)
+async function editarProduto(id_produto, nomeAtual, qtdAtual, precoAtual) {
+    const token = sessionStorage.getItem('token');
+    const novoNome = prompt("Nome do produto:", nomeAtual);
+    const novaQtd = prompt("Quantidade em estoque:", qtdAtual);
+    const novoPreco = prompt("Preço unitário (R$):", precoAtual);
+
+    if (novoNome === null || novaQtd === null) return;
+
+    try {
+        const resposta = await fetch(`${API_URL}/estoque/${id_produto}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                nome_produto: novoNome,
+                id_categoria_produto: 1, // mantém categoria base
+                quantidade: Number(novaQtd),
+                preco_unitario: novoPreco ? Number(novoPreco) : 0,
+                unidade_medida: "un",
+                estoque_minimo: 5
+            })
+        });
+
+        if (!resposta.ok) {
+            alert("Não foi possível atualizar o produto.");
+            return;
+        }
+
+        carregarEstoque();
+
+    } catch (erro) {
+        console.error("Erro ao atualizar produto:", erro);
+        alert("Erro de conexão ao atualizar.");
+    }
+}
+
+// 5. DELETAR PRODUTO (DELETE)
+async function deletarProduto(id_produto) {
+    if (!confirm("Remover este item do estoque?")) return;
+
+    const token = sessionStorage.getItem('token');
+
+    try {
+        const resposta = await fetch(`${API_URL}/estoque/${id_produto}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!resposta.ok) {
+            alert("Não foi possível excluir o produto.");
+            return;
+        }
+
+        carregarEstoque();
+
+    } catch (erro) {
+        console.error("Erro ao excluir produto:", erro);
+        alert("Erro de conexão ao excluir.");
+    }
+}
+
+function limparCamposEstoque() {
+    document.getElementById("produto").value = "";
+    document.getElementById("quantidade").value = "";
+    document.getElementById("preco").value = "";
+    document.getElementById("categoria").value = "";
+}
+
+function getBadgeStatus(qtd) {
+    if (qtd <= 5) return `<span class="badge-baixo">CRÍTICO</span>`;
+    if (qtd <= 15) return `<span class="badge-medio">ATENÇÃO</span>`;
+    return `<span class="badge-alto">OK</span>`;
+}
 
     /* =====================================================
        CADASTRO DE FUNCIONÁRIOS (COM LOCALSTORAGE)
     ===================================================== */
-    let funcionarios = JSON.parse(localStorage.getItem("yg_funcionarios")) || [];
+    /* =====================================================
+   EQUIPE & FUNCIONÁRIOS (INTEGRADO COM A API MYSQL)
+===================================================== */
 
-    function cadastrarFuncionario(){
-        const nome = document.getElementById("nomeFuncionario").value.trim();
-        const cargo = document.getElementById("cargo").value.trim();
-        const telefone = document.getElementById("telefone").value.trim();
-        const salario = document.getElementById("salario").value;
-        const status = document.getElementById("status").value;
+// 1. CARREGAR FUNCIONÁRIOS DA API (GET)
+async function carregarFuncionarios() {
+    const token = sessionStorage.getItem('token');
+    const tabela = document.getElementById("tabelaFuncionarios");
+    if (!tabela) return;
 
-        if(!nome || !cargo || !telefone || !salario){
-            alert("Preencha todos os campos do funcionário!");
+    try {
+        const resposta = await fetch(`${API_URL}/funcionarios`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (resposta.status === 403 || resposta.status === 401) {
+            tabela.innerHTML = `<tr><td colspan="6" class="text-danger py-3">Acesso restrito à Gerência.</td></tr>`;
             return;
         }
 
-        funcionarios.push({
-            nome,
-            cargo,
-            telefone,
-            salario: Number(salario),
-            status
+        const funcs = await resposta.json();
+        renderizarTabelaFuncionarios(funcs);
+
+    } catch (erro) {
+        console.error("Erro ao carregar colaboradores:", erro);
+        tabela.innerHTML = `<tr><td colspan="6" class="text-danger py-3">Erro ao conectar com o servidor.</td></tr>`;
+    }
+}
+
+// 2. RENDERIZAR TABELA
+function renderizarTabelaFuncionarios(funcs) {
+    const tabela = document.getElementById("tabelaFuncionarios");
+    if (!tabela) return;
+
+    tabela.innerHTML = "";
+
+    if (!funcs || funcs.length === 0) {
+        tabela.innerHTML = `<tr><td colspan="6" class="text-secondary py-3">Nenhum funcionário encontrado.</td></tr>`;
+        return;
+    }
+
+    funcs.forEach((f) => {
+        const badgeStatus = f.status === "Ativo" 
+            ? '<span class="badge bg-success">Ativo</span>' 
+            : '<span class="badge bg-secondary">Desativado</span>';
+
+        const salarioTexto = (f.salario !== undefined && f.salario !== null && f.salario !== "")
+            ? `R$ ${Number(f.salario).toFixed(2)}`
+            : '<span class="text-muted">Não informado</span>';
+
+        tabela.innerHTML += `
+            <tr>
+                <td class="text-start ps-3 fw-bold">${f.nome}</td>
+                <td>${f.nome_cargo || '-'}</td>
+                <td>${f.telefone || '-'}</td>
+                <td>${salarioTexto}</td>
+                <td>${badgeStatus}</td>
+                <td>
+                    <button class="btn btn-outline-warning btn-sm me-1" onclick="editarFuncionarioPrompt(${f.id_funcionario}, '${f.nome}', '${f.nome_cargo}', '${f.telefone || ''}', ${f.salario || 0}, '${f.status}')">✏️</button>
+                    <button class="btn btn-outline-danger btn-sm" onclick="deletarFuncionarioAPI(${f.id_funcionario})">🗑️</button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+// 3. ADICIONAR FUNCIONÁRIO (POST)
+async function cadastrarFuncionarioPainel() {
+    const token = sessionStorage.getItem('token');
+    const nome = document.getElementById("nomeFuncionario").value.trim();
+    const cargoSelect = document.getElementById("cargoFuncionario");
+    const cargo = cargoSelect ? cargoSelect.value : "";
+    const telefone = document.getElementById("telefone").value.trim();
+    const salario = document.getElementById("salario").value;
+    const status = document.getElementById("status").value;
+
+    if (!nome || !cargo) {
+        alert("Preencha o Nome e selecione o Cargo do colaborador!");
+        return;
+    }
+
+    try {
+        const resposta = await fetch(`${API_URL}/funcionarios`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                nome: nome,
+                cargo: cargo,
+                telefone: telefone || null,
+                salario: salario ? parseFloat(salario) : null,
+                status: status
+            })
         });
 
-        localStorage.setItem("yg_funcionarios", JSON.stringify(funcionarios));
+        if (!resposta.ok) {
+            const erro = await resposta.json();
+            alert(erro.erro || "Falha ao cadastrar colaborador.");
+            return;
+        }
+
         limparCamposFuncionario();
-        renderizarFuncionarios();
+        carregarFuncionarios();
+
+    } catch (erro) {
+        console.error("Erro ao cadastrar funcionário:", erro);
+        alert("Erro de conexão ao cadastrar colaborador.");
     }
+}
 
-    function limparCamposFuncionario(){
-        document.getElementById("nomeFuncionario").value = "";
-        document.getElementById("cargo").value = "";
-        document.getElementById("telefone").value = "";
-        document.getElementById("salario").value = "";
-        document.getElementById("status").value = "Ativo";
-    }
+// 4. ATUALIZAR FUNCIONÁRIO (PUT)
+async function editarFuncionarioPrompt(id, nomeAtual, cargoAtual, telAtual, salAtual, statusAtual) {
+    const token = sessionStorage.getItem('token');
+    const novoNome = prompt("Nome completo:", nomeAtual);
+    const novoCargo = prompt("Cargo (Gerente, Copeiro, Cozinheiro, Garçom):", cargoAtual);
+    const novoTel = prompt("Telefone:", telAtual);
+    const novoSal = prompt("Salário (R$):", salAtual);
 
-    function deletarFuncionario(index){
-        if(confirm("Deseja excluir este colaborador?")){
-            funcionarios.splice(index, 1);
-            localStorage.setItem("yg_funcionarios", JSON.stringify(funcionarios));
-            renderizarFuncionarios();
-        }
-    }
+    if (novoNome === null || novoCargo === null) return;
 
-    function renderizarFuncionarios(){
-        const tabela = document.getElementById("tabelaFuncionarios");
-        tabela.innerHTML = "";
+    try {
+        const resposta = await fetch(`${API_URL}/funcionarios/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                nome: novoNome,
+                cargo: novoCargo,
+                telefone: novoTel || null,
+                salario: novoSal ? parseFloat(novoSal) : null,
+                status: statusAtual
+            })
+        });
 
-        if(funcionarios.length === 0){
-            tabela.innerHTML = `<tr><td colspan="6" class="text-secondary py-3">Nenhum funcionário cadastrado.</td></tr>`;
+        if (!resposta.ok) {
+            alert("Não foi possível atualizar os dados do colaborador.");
             return;
         }
 
-        funcionarios.forEach((f, i) => {
-            const badgeStatus = f.status === "Ativo" 
-                ? '<span class="badge bg-success">Ativo</span>' 
-                : '<span class="badge bg-secondary">Desativado</span>';
+        carregarFuncionarios();
 
-            tabela.innerHTML += `
-                <tr>
-                    <td class="text-start ps-3 fw-bold">${f.nome}</td>
-                    <td>${f.cargo}</td>
-                    <td>${f.telefone}</td>
-                    <td>R$ ${f.salario.toFixed(2)}</td>
-                    <td>${badgeStatus}</td>
-                    <td>
-                        <button class="btn btn-outline-danger btn-sm" onclick="deletarFuncionario(${i})">Excluir</button>
-                    </td>
-                </tr>
-            `;
+    } catch (erro) {
+        console.error("Erro ao atualizar colaborador:", erro);
+        alert("Erro de conexão ao atualizar.");
+    }
+}
+
+// 5. REMOVER OU DESATIVAR FUNCIONÁRIO (DELETE)
+async function deletarFuncionarioAPI(id) {
+    if (!confirm("Tem a certeza de que deseja remover este colaborador?")) return;
+
+    const token = sessionStorage.getItem('token');
+
+    try {
+        const resposta = await fetch(`${API_URL}/funcionarios/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
 
-        
+        if (!resposta.ok) {
+            alert("Não foi possível remover o colaborador.");
+            return;
+        }
+
+        carregarFuncionarios();
+
+    } catch (erro) {
+        console.error("Erro ao excluir colaborador:", erro);
+        alert("Erro de conexão ao excluir.");
     }
+}
+
+function limparCamposFuncionario() {
+    document.getElementById("nomeFuncionario").value = "";
+    if (document.getElementById("cargoFuncionario")) {
+        document.getElementById("cargoFuncionario").value = "";
+    }
+    document.getElementById("telefone").value = "";
+    document.getElementById("salario").value = "";
+    document.getElementById("status").value = "Ativo";
+}
 
     /* INICIALIZAÇÃO */
     aplicarPermissoes();
     renderizarPonto();
-    renderizarEstoque();
-    renderizarFuncionarios();
+    carregarEstoque();
+    carregarFuncionarios();
