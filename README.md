@@ -150,11 +150,11 @@ no próprio HTML as abas que a permissão não libera.
 - [X] Desenvolver tela de cadastro.
 - [X] Autenticação de login.
 - [X] Realizar cadastro.
-- [ ] Bloquear o cargo definido ao logar no Dashboard.
-- [ ] Persistência de dados para estoque.
-- [ ] Persistência de dados para funcionários.
+- [X] Bloquear o cargo definido ao logar no Dashboard.
+- [X] Persistência de dados para estoque.
+- [X] Persistência de dados para funcionários.
 
-- [ ] ACESSAR O BANCO DE DADOS REMOTAMENTE (mais complicadinho isso ae eu acho)
+- [ ] ACESSAR O BANCO DE DADOS REMOTAMENTE
 
 ---
 
