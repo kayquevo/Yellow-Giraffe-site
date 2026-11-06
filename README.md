@@ -154,7 +154,7 @@ no próprio HTML as abas que a permissão não libera.
 - [X] Persistência de dados para estoque.
 - [X] Persistência de dados para funcionários.
 
-- [ ] ACESSAR O BANCO DE DADOS REMOTAMENTE
+- [ ] Colocar no ar o site
 
 ---
 
