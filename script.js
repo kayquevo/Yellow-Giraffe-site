@@ -232,7 +232,12 @@ function mostrarTela(id, elementoBtn){
     /* =====================================================
     CONTROLE DE ESTOQUE (INTEGRADO COM A API MYSQL)
     ===================================================== */
-const API_URL = 'http://localhost:5000/api';
+// Se o site for aberto direto do disco (file://) ou por um servidor estático local
+// (ex: Live Server, porta 5500), fala com o Flask em localhost:5000. Quando o site é
+// servido pelo próprio Flask (local em :5000 ou no PythonAnywhere), usa o caminho relativo.
+const API_URL = (location.protocol === 'file:' || location.port === '5500')
+    ? 'http://localhost:5000/api'
+    : '/api';
 
 // 1. LISTAR PRODUTOS (GET)
 async function carregarEstoque() {

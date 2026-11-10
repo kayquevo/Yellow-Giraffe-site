@@ -1,0 +1,14 @@
+# Banco de dados local — cada pessoa cria o seu a partir do schema em
+# backend/database/, rodando o comando do LEIA-ME.md. Nunca comitar o
+# arquivo .db de verdade (pode ter senhas de teste, dados sensíveis, etc.)
+backend/*.db
+
+# Arquivos de teste de API feitos na mão (login_x.json, produto.json, etc.)
+backend/*.json
+
+# Cache do Python
+__pycache__/
+*.pyc
+
+# Variáveis de ambiente (se um dia usarem .env)
+.env

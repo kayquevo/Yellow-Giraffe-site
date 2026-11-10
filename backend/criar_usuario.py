@@ -12,23 +12,23 @@ with app.app_context():
     senha = input("Senha (vai ser transformada em hash, não fica salva como texto puro): ")
     nome_cargo = input("Cargo (precisa já existir na tabela cargo, ex: Gerente): ")
 
-    cargo = db.query_one("SELECT id_cargo FROM cargo WHERE nome_cargo = %s", (nome_cargo,))
+    cargo = db.query_one("SELECT id_cargo FROM cargo WHERE nome_cargo = ?", (nome_cargo,))
     if cargo is None:
         print(f"Cargo '{nome_cargo}' não encontrado. Cargos existentes:")
         for c in db.query("SELECT nome_cargo FROM cargo"):
             print(" -", c["nome_cargo"])
         raise SystemExit(1)
 
-    existente = db.query_one("SELECT id_funcionario FROM funcionario WHERE email = %s", (email,))
+    existente = db.query_one("SELECT id_funcionario FROM funcionario WHERE email = ?", (email,))
     hash_senha = generate_password_hash(senha)
 
     if existente:
-        db.execute("UPDATE funcionario SET senha_hash = %s WHERE id_funcionario = %s",
+        db.execute("UPDATE funcionario SET senha_hash = ? WHERE id_funcionario = ?",
                    (hash_senha, existente["id_funcionario"]))
         print(f"Senha atualizada para o funcionário existente (id {existente['id_funcionario']}).")
     else:
         novo_id = db.execute(
-            "INSERT INTO funcionario (nome, email, senha_hash, id_cargo, status) VALUES (%s, %s, %s, %s, 'Ativo')",
+            "INSERT INTO funcionario (nome, email, senha_hash, id_cargo, status) VALUES (?, ?, ?, ?, 'Ativo')",
             (nome, email, hash_senha, cargo["id_cargo"]),
         )
         print(f"Funcionário criado com id {novo_id}.")

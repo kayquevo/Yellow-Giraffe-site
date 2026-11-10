@@ -1,22 +1,15 @@
-import pymysql
-import pymysql.cursors
+import sqlite3
 from flask import g
 
 import config
 
 
 def get_db():
-    """Abre (ou reaproveita) uma conexão MySQL para a requisição atual."""
+    """Abre (ou reaproveita) a conexão SQLite para a requisição atual."""
     if "db" not in g:
-        g.db = pymysql.connect(
-            host=config.DB_HOST,
-            port=config.DB_PORT,
-            user=config.DB_USER,
-            password=config.DB_PASSWORD,
-            database=config.DB_NAME,
-            cursorclass=pymysql.cursors.DictCursor,
-            autocommit=False,
-        )
+        g.db = sqlite3.connect(config.DB_PATH)
+        g.db.row_factory = sqlite3.Row  # permite acessar colunas por nome, como um dicionário
+        g.db.execute("PRAGMA foreign_keys = ON")  # o SQLite não aplica FKs por padrão
     return g.db
 
 
@@ -29,9 +22,8 @@ def close_db(exc=None):
 def query(sql, params=()):
     """SELECT que retorna uma lista de dicionários (uma linha = um dict)."""
     db = get_db()
-    with db.cursor() as cur:
-        cur.execute(sql, params)
-        return cur.fetchall()
+    cur = db.execute(sql, params)
+    return [dict(row) for row in cur.fetchall()]
 
 
 def query_one(sql, params=()):
@@ -42,8 +34,7 @@ def query_one(sql, params=()):
 def execute(sql, params=()):
     """INSERT/UPDATE/DELETE. Devolve o id gerado (no caso de INSERT)."""
     db = get_db()
-    with db.cursor() as cur:
-        cur.execute(sql, params)
-        novo_id = cur.lastrowid
+    cur = db.execute(sql, params)
+    novo_id = cur.lastrowid
     db.commit()
     return novo_id
