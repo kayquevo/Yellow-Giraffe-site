@@ -118,7 +118,7 @@ Se preferir uma interface gráfica, abra o arquivo `yellow_giraffe.db` no [DB Br
    Invoke-RestMethod -Uri "http://localhost:5000/api/estoque" -Method Get -Headers @{ Authorization = "Bearer $token" }
    ```
 
-<img src="imgs/back-img/back7.jpeg" width="700px">
+<img src="imgs/back-img/backsql1.jpg">
 
 **3. Consultando itens no estoque:**
 
@@ -126,7 +126,7 @@ Se preferir uma interface gráfica, abra o arquivo `yellow_giraffe.db` no [DB Br
    python -c "import sqlite3; [print(r) for r in sqlite3.connect('yellow_giraffe.db').execute('SELECT * FROM produto_estoque')]"
    ```
 
-<img src="imgs/back-img/backsql.jpg" width="700px">
+<img src="imgs/back-img/backsql1.jpg" width="850px">
 ## Endpoints da API
 
 | Módulo | Rotas |
